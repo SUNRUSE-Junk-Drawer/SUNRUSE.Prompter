@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SUNRUSE.Prompter.Abstractions", "SUNRUSE.Prompter.Abstractions\SUNRUSE.Prompter.Abstractions.csproj", "{D3B7BAEC-997B-4C23-A743-937D3983214C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SUNRUSE.Prompter.Abstractions", "SUNRUSE.Prompter.Abstractions\SUNRUSE.Prompter.Abstractions.csproj", "{D3B7BAEC-997B-4C23-A743-937D3983214C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Abstractions", "Abstractions", "{02CC73A9-71F8-4254-985F-5F4C5A6BEEDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SUNRUSE.Prompter.Abstractions.Tests", "SUNRUSE.Prompter.Abstractions.Tests\SUNRUSE.Prompter.Abstractions.Tests.csproj", "{F85FFB5D-6EE5-470F-86C1-93F3A64BCA0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SUNRUSE.Prompter.Abstractions.Tests", "SUNRUSE.Prompter.Abstractions.Tests\SUNRUSE.Prompter.Abstractions.Tests.csproj", "{F85FFB5D-6EE5-470F-86C1-93F3A64BCA0D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence", "{CE97A667-5BDC-4435-B384-24648170DBD8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SUNRUSE.Prompter.Persistence.Abstractions", "SUNRUSE.Prompter.Persistence.Abstractions\SUNRUSE.Prompter.Persistence.Abstractions.csproj", "{26519196-C4E2-4410-8FC9-E3648DE4B956}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +27,10 @@ Global
 		{F85FFB5D-6EE5-470F-86C1-93F3A64BCA0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F85FFB5D-6EE5-470F-86C1-93F3A64BCA0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F85FFB5D-6EE5-470F-86C1-93F3A64BCA0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26519196-C4E2-4410-8FC9-E3648DE4B956}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26519196-C4E2-4410-8FC9-E3648DE4B956}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26519196-C4E2-4410-8FC9-E3648DE4B956}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26519196-C4E2-4410-8FC9-E3648DE4B956}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{D3B7BAEC-997B-4C23-A743-937D3983214C} = {02CC73A9-71F8-4254-985F-5F4C5A6BEEDF}
 		{F85FFB5D-6EE5-470F-86C1-93F3A64BCA0D} = {02CC73A9-71F8-4254-985F-5F4C5A6BEEDF}
+		{26519196-C4E2-4410-8FC9-E3648DE4B956} = {CE97A667-5BDC-4435-B384-24648170DBD8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {750A48DA-7437-4443-BDF0-C9AA2FB0A49C}
