@@ -263,7 +263,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                     .Select(i =>
                     {
                         var greatestEventId = -1;
-                        var greatestSnapshotEventId = (int?)null;
+                        var greatestSnapshotId = (int?)null;
 
                         var steps = Enumerable
                             .Range(0, Random.Next(25, 50))
@@ -272,7 +272,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                                 var isSnapshot = step % 2 == 1 && Random.Next(0, 2) == 0;
                                 if (isSnapshot)
                                 {
-                                    greatestSnapshotEventId = greatestEventId;
+                                    greatestSnapshotId = greatestEventId;
                                 }
                                 else
                                 {
@@ -297,7 +297,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                             EntityTypeName = $"Test Entity Type Name {Random.Next(0, 4)}",
                             EntityId = Guid.NewGuid(),
                             GreatestEventId = greatestEventId,
-                            GreatestSnapshotId = greatestSnapshotEventId,
+                            GreatestSnapshotId = greatestSnapshotId,
                             Steps = steps
                         };
                     })
