@@ -119,7 +119,6 @@ namespace SUNRUSE.Prompter.Persistence.Files
                 latestEvent = Directory
                     .EnumerateFiles(eventsPath)
                     .Select(filename => int.Parse(Path.GetFileName(filename)))
-                    .DefaultIfEmpty(-1)
                     .Max() + 1;
             }
 
