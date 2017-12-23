@@ -22,7 +22,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions
     }
 
     /// <summary>Implemented by persistence stores.</summary>
-    public interface IEventStore
+    public interface IEventStore : IDisposable
     {
         /// <summary>Persists <see cref="byte"/>s representing an event.</summary>
         /// <param name="entityTypeName">The name of the entity type being persisted.  This can be considered a "namespace", "collection" or "table" of <paramref name="entityId"/>s.</param>
