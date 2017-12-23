@@ -9,7 +9,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
 {
     public sealed class PromptTests
     {
-        [Fact]
+        [Fact, Trait("Type", "Unit")]
         public void PromptIdSet()
         {
             var promptId = Guid.NewGuid();
@@ -19,7 +19,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Equal(promptId, prompt.PromptId);
         }
 
-        [Fact]
+        [Fact, Trait("Type", "Unit")]
         public void PromptIdRoundTripsSerialization()
         {
             var promptId = Guid.NewGuid();
@@ -30,7 +30,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Equal(promptId, prompt.PromptId);
         }
 
-        [Fact]
+        [Fact, Trait("Type", "Unit")]
         public void ControlsSet()
         {
             var prompt = new Prompt(Guid.NewGuid(), ImmutableArray.Create
@@ -67,7 +67,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.True(prompt.Controls[2].IsLastInGroup);
         }
 
-        [Fact]
+        [Fact, Trait("Type", "Unit")]
         public void ControlsRoundTripsSerialization()
         {
             var prompt = new Prompt(Guid.NewGuid(), ImmutableArray.Create
@@ -106,7 +106,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.True(prompt.Controls[2].IsLastInGroup);
         }
 
-        [Fact]
+        [Fact, Trait("Type", "Unit")]
         public void BackgroundLayersDefaultsToEmpty()
         {
             var prompt = new Prompt(Guid.NewGuid(), ImmutableArray<Control>.Empty);
@@ -114,7 +114,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Empty(prompt.BackgroundLayers);
         }
 
-        [Fact]
+        [Fact, Trait("Type", "Unit")]
         public void BackgroundLayersSet()
         {
             var prompt = new Prompt(Guid.NewGuid(), ImmutableArray<Control>.Empty, ImmutableArray.Create("Test Background Layer A", "Test Background Layer B", "Test Background Layer C"));
@@ -122,7 +122,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Equal(new[] { "Test Background Layer A", "Test Background Layer B", "Test Background Layer C" }, prompt.BackgroundLayers);
         }
 
-        [Fact]
+        [Fact, Trait("Type", "Unit")]
         public void BackgroundLayersRoundTripsSerialization()
         {
             var prompt = new Prompt(Guid.NewGuid(), ImmutableArray<Control>.Empty, ImmutableArray.Create("Test Background Layer A", "Test Background Layer B", "Test Background Layer C"));

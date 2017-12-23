@@ -6,7 +6,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
 {
     public sealed class ControlTests
     {
-        [Fact]
+        [Fact, Trait("Type", "Unit")]
         public void ButtonIdDefaultsToNull()
         {
             var control = new Control();
@@ -14,7 +14,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Null(control.ButtonId);
         }
 
-        [Theory]
+        [Theory, Trait("Type", "Unit")]
         [InlineData(null)]
         [InlineData("Test Non-Null Value")]
         public void ButtonIdCanBeSetTo(string expected)
@@ -26,7 +26,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory]
+        [Theory, Trait("Type", "Unit")]
         [InlineData(null)]
         [InlineData("Test Non-Null Value")]
         public void ButtonIdRoundTripsSerializationWhen(string expected)
@@ -38,7 +38,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Equal(expected, roundTripped.ButtonId);
         }
 
-        [Fact]
+        [Fact, Trait("Type", "Unit")]
         public void LeftIconDefaultsToNull()
         {
             var control = new Control();
@@ -46,7 +46,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Null(control.LeftIcon);
         }
 
-        [Theory]
+        [Theory, Trait("Type", "Unit")]
         [InlineData(null)]
         [InlineData("Test Non-Null Value")]
         public void LeftIconCanBeSetTo(string expected)
@@ -58,7 +58,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory]
+        [Theory, Trait("Type", "Unit")]
         [InlineData(null)]
         [InlineData("Test Non-Null Value")]
         public void LeftIconRoundTripsSerializationWhen(string expected)
@@ -70,7 +70,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Equal(expected, roundTripped.LeftIcon);
         }
 
-        [Fact]
+        [Fact, Trait("Type", "Unit")]
         public void LeftTextDefaultsToNull()
         {
             var control = new Control();
@@ -78,7 +78,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Null(control.LeftText);
         }
 
-        [Theory]
+        [Theory, Trait("Type", "Unit")]
         [InlineData(null)]
         [InlineData("Test Non-Null Value")]
         public void LeftTextCanBeSetTo(string expected)
@@ -90,7 +90,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory]
+        [Theory, Trait("Type", "Unit")]
         [InlineData(null)]
         [InlineData("Test Non-Null Value")]
         public void LeftTextRoundTripsSerializationWhen(string expected)
@@ -102,7 +102,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Equal(expected, roundTripped.LeftText);
         }
 
-        [Fact]
+        [Fact, Trait("Type", "Unit")]
         public void MiddleTextDefaultsToNull()
         {
             var control = new Control();
@@ -110,7 +110,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Null(control.MiddleText);
         }
 
-        [Theory]
+        [Theory, Trait("Type", "Unit")]
         [InlineData(null)]
         [InlineData("Test Non-Null Value")]
         public void MiddleTextCanBeSetTo(string expected)
@@ -122,7 +122,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory]
+        [Theory, Trait("Type", "Unit")]
         [InlineData(null)]
         [InlineData("Test Non-Null Value")]
         public void MiddleTextRoundTripsSerializationWhen(string expected)
@@ -134,7 +134,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Equal(expected, roundTripped.MiddleText);
         }
 
-        [Fact]
+        [Fact, Trait("Type", "Unit")]
         public void RightTextDefaultsToNull()
         {
             var control = new Control();
@@ -142,7 +142,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Null(control.RightText);
         }
 
-        [Theory]
+        [Theory, Trait("Type", "Unit")]
         [InlineData(null)]
         [InlineData("Test Non-Null Value")]
         public void RightTextCanBeSetTo(string expected)
@@ -154,7 +154,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory]
+        [Theory, Trait("Type", "Unit")]
         [InlineData(null)]
         [InlineData("Test Non-Null Value")]
         public void RightTextRoundTripsSerializationWhen(string expected)
@@ -166,7 +166,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Equal(expected, roundTripped.RightText);
         }
 
-        [Fact]
+        [Fact, Trait("Type", "Unit")]
         public void RightIconDefaultsToNull()
         {
             var control = new Control();
@@ -174,7 +174,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Null(control.RightIcon);
         }
 
-        [Theory]
+        [Theory, Trait("Type", "Unit")]
         [InlineData(null)]
         [InlineData("Test Non-Null Value")]
         public void RightIconCanBeSetTo(string expected)
@@ -186,7 +186,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory]
+        [Theory, Trait("Type", "Unit")]
         [InlineData(null)]
         [InlineData("Test Non-Null Value")]
         public void RightIconRoundTripsSerializationWhen(string expected)
@@ -198,7 +198,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Equal(expected, roundTripped.RightIcon);
         }
 
-        [Fact]
+        [Fact, Trait("Type", "Unit")]
         public void IsFirstInGroupDefaultsToFalse()
         {
             var control = new Control();
@@ -206,7 +206,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.False(control.IsFirstInGroup);
         }
 
-        [Theory]
+        [Theory, Trait("Type", "Unit")]
         [InlineData(false)]
         [InlineData(true)]
         public void IsFirstInGroupCanBeSetTo(bool expected)
@@ -218,7 +218,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory]
+        [Theory, Trait("Type", "Unit")]
         [InlineData(false)]
         [InlineData(true)]
         public void IsFirstInGroupRoundTripsSerializationWhen(bool expected)
@@ -230,7 +230,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Equal(expected, roundTripped.IsFirstInGroup);
         }
 
-        [Fact]
+        [Fact, Trait("Type", "Unit")]
         public void IsLastInGroupDefaultsToFalse()
         {
             var control = new Control();
@@ -238,7 +238,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.False(control.IsLastInGroup);
         }
 
-        [Theory]
+        [Theory, Trait("Type", "Unit")]
         [InlineData(false)]
         [InlineData(true)]
         public void IsLastInGroupCanBeSetTo(bool expected)
@@ -250,7 +250,7 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             Assert.Equal(expected, actual);
         }
 
-        [Theory]
+        [Theory, Trait("Type", "Unit")]
         [InlineData(false)]
         [InlineData(true)]
         public void IsLastInGroupRoundTripsSerializationWhen(bool expected)
