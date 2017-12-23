@@ -5,4 +5,4 @@ install:
 - dotnet restore
 script:
 - dotnet build
-- dotnet test
+- find . -maxdepth 1 | grep .Tests | grep -v .Abstractions.Tests | xargs -n1 dotnet test
