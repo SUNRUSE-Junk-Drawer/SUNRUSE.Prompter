@@ -68,7 +68,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
         [InlineData(true, true, true, false, true, true, true, false, 11)]
         [InlineData(true, true, true, false, true, true, false, true, 11)]
         [InlineData(true, true, true, false, true, true, true, true, 11)]
-        public async Task GetStatisticsNumberOfPersistedEventsWithRestart(bool includesCompetingSequences, bool previousSessionIncludesEvents, bool previousSessionIncludesSnapshots, bool previousSessionEndsWithSnapshot, bool thisSessionStartsWithSnapshot, bool thisSessionIncludesEvents, bool thisSessionIncludesSnapshots, bool thisSessionEndsWithSnapshot, int numberOfPersistedEvents)
+        public async Task GetStatisticsGreatestEventIDWithRestart(bool includesCompetingSequences, bool previousSessionIncludesEvents, bool previousSessionIncludesSnapshots, bool previousSessionEndsWithSnapshot, bool thisSessionStartsWithSnapshot, bool thisSessionIncludesEvents, bool thisSessionIncludesSnapshots, bool thisSessionEndsWithSnapshot, int greatestEventId)
         {
             var previousSessionSteps = new List<Step>();
             if (previousSessionIncludesEvents) previousSessionSteps.Add(new Step(false, CreateTestData()));
@@ -112,7 +112,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
 
                 var statistics = await eventStore.GetStatistics(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId);
 
-                Assert.Equal(numberOfPersistedEvents, statistics.NumberOfPersistedEvents);
+                Assert.Equal(greatestEventId, statistics.GreatestEventId);
             }
         }
 
@@ -153,7 +153,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
         [InlineData(true, true, true, false, true, true, true, false, 9)]
         [InlineData(true, true, true, false, true, true, false, true, 11)]
         [InlineData(true, true, true, false, true, true, true, true, 11)]
-        public async Task GetStatisticsNumberOfPersistedEventsAtTimeOfLatestSnapshotWithRestart(bool includesCompetingSequences, bool previousSessionIncludesEvents, bool previousSessionIncludesSnapshots, bool previousSessionEndsWithSnapshot, bool thisSessionStartsWithSnapshot, bool thisSessionIncludesEvents, bool thisSessionIncludesSnapshots, bool thisSessionEndsWithSnapshot, int numberOfPersistedEventsAtTimeOfLatestSnapshot)
+        public async Task GetStatisticsGreatestSnapshotIdWithRestart(bool includesCompetingSequences, bool previousSessionIncludesEvents, bool previousSessionIncludesSnapshots, bool previousSessionEndsWithSnapshot, bool thisSessionStartsWithSnapshot, bool thisSessionIncludesEvents, bool thisSessionIncludesSnapshots, bool thisSessionEndsWithSnapshot, int greatestSnapshotId)
         {
             var previousSessionSteps = new List<Step>();
             if (previousSessionIncludesEvents) previousSessionSteps.Add(new Step(false, CreateTestData()));
@@ -197,7 +197,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
 
                 var statistics = await eventStore.GetStatistics(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId);
 
-                Assert.Equal(numberOfPersistedEventsAtTimeOfLatestSnapshot, statistics.NumberOfPersistedEventsAtTimeOfLatestSnapshot);
+                Assert.Equal(greatestSnapshotId, statistics.GreatestSnapshotId);
             }
         }
 
@@ -393,14 +393,14 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                     .Select(i =>
                     {
                         var greatestEventId = 0;
-                        var greatestSnapshotEventId = 0;
+                        var greatestSnapshotId = 0;
 
                         var steps = Enumerable
                             .Range(0, Random.Next(25, 50))
                             .Select(step =>
                             {
                                 var isSnapshot = step % 2 == 1 && Random.Next(0, 2) == 0;
-                                if (isSnapshot) greatestSnapshotEventId = greatestEventId;
+                                if (isSnapshot) greatestSnapshotId = greatestEventId;
 
                                 var output = new
                                 {
@@ -421,8 +421,8 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                         {
                             EntityTypeName = $"Test Entity Type Name {Random.Next(0, 4)}",
                             EntityId = Guid.NewGuid(),
-                            ExpectedNumberOfPersistedEventsId = greatestEventId,
-                            ExpectedSnapshotEventId = greatestSnapshotEventId,
+                            GreatestEventId = greatestEventId,
+                            GreatestSnapshotId = greatestSnapshotId,
                             Steps = steps
                         };
                     })
@@ -456,17 +456,15 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                 var thisSequenceTemplates = previousSequenceTemplates
                     .Select(previousSequenceTemplate =>
                     {
-
-
-                        var greatestEventId = previousSequenceTemplate.ExpectedNumberOfPersistedEventsId;
-                        var greatestSnapshotEventId = previousSequenceTemplate.ExpectedSnapshotEventId;
+                        var greatestEventId = previousSequenceTemplate.GreatestEventId;
+                        var greatestSnapshotId = previousSequenceTemplate.GreatestSnapshotId;
 
                         var steps = Enumerable
                             .Range(0, Random.Next(25, 50))
                             .Select(step =>
                             {
-                                var isSnapshot = greatestEventId != greatestSnapshotEventId && Random.Next(0, 2) == 0;
-                                if (isSnapshot) greatestSnapshotEventId = greatestEventId;
+                                var isSnapshot = greatestEventId != greatestSnapshotId && Random.Next(0, 2) == 0;
+                                if (isSnapshot) greatestSnapshotId = greatestEventId;
 
                                 var output = new
                                 {
@@ -486,8 +484,8 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                         return new
                         {
                             PreviousTemplate = previousSequenceTemplate,
-                            ExpectedNumberOfPersistedEventsId = greatestEventId,
-                            ExpectedSnapshotEventId = greatestSnapshotEventId,
+                            GreatestEventId = greatestEventId,
+                            GreatestSnapshotId = greatestSnapshotId,
                             Steps = steps
                         };
                     })
@@ -506,9 +504,9 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                             await eventStore.PersistEvent(thisSequenceTemplate.PreviousTemplate.EntityTypeName, thisSequenceTemplate.PreviousTemplate.EntityId, step.EventId, step.Data);
                         }
                     }
-                    var eventIds = await eventStore.GetStatistics(thisSequenceTemplate.PreviousTemplate.EntityTypeName, thisSequenceTemplate.PreviousTemplate.EntityId);
-                    Assert.Equal(thisSequenceTemplate.ExpectedNumberOfPersistedEventsId, eventIds.NumberOfPersistedEvents);
-                    Assert.Equal(thisSequenceTemplate.ExpectedSnapshotEventId, eventIds.NumberOfPersistedEventsAtTimeOfLatestSnapshot);
+                    var statistics = await eventStore.GetStatistics(thisSequenceTemplate.PreviousTemplate.EntityTypeName, thisSequenceTemplate.PreviousTemplate.EntityId);
+                    Assert.Equal(thisSequenceTemplate.GreatestEventId, statistics.GreatestEventId);
+                    Assert.Equal(thisSequenceTemplate.GreatestSnapshotId, statistics.GreatestSnapshotId);
                     var results = new List<ImmutableArray<byte>>();
                     foreach (var step in thisSequenceTemplate.PreviousTemplate.Steps.Concat(thisSequenceTemplate.Steps))
                     {

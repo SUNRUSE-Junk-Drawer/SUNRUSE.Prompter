@@ -114,7 +114,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
         [InlineData(true, true, true, false, 5)]
         [InlineData(true, true, true, true, 5)]
         [InlineData(true, true, false, true, 5)]
-        public async Task GetStatisticsNumberOfPersistedEventsWithoutRestarting(bool includesCompetingSequences, bool includesEvents, bool includesSnapshots, bool endsWithSnapshot, int numberOfPersistedEvents)
+        public async Task GetStatisticsGreatestEventIdWithoutRestarting(bool includesCompetingSequences, bool includesEvents, bool includesSnapshots, bool endsWithSnapshot, int greatestEventId)
         {
             using (var eventStore = CreateInstance())
             {
@@ -137,7 +137,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
 
                 var statistics = await eventStore.GetStatistics(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId);
 
-                Assert.Equal(numberOfPersistedEvents, statistics.NumberOfPersistedEvents);
+                Assert.Equal(greatestEventId, statistics.GreatestEventId);
             }
         }
 
@@ -148,7 +148,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
         [InlineData(true, true, true, false, 4)]
         [InlineData(true, true, true, true, 5)]
         [InlineData(true, true, false, true, 5)]
-        public async Task GetStatisticsNumberOfPersistedEventsAtTimeOfLatestSnapshotWithoutRestarting(bool includesCompetingSequences, bool includesEvents, bool includesSnapshots, bool endsWithSnapshot, int numberOfPersistedEventsAtTimeOfLatestSnapshot)
+        public async Task GetStatisticsGreatestSnapshotIdWithoutRestarting(bool includesCompetingSequences, bool includesEvents, bool includesSnapshots, bool endsWithSnapshot, int greatestSnapshotId)
         {
             using (var eventStore = CreateInstance())
             {
@@ -171,7 +171,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
 
                 var statistics = await eventStore.GetStatistics(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId);
 
-                Assert.Equal(numberOfPersistedEventsAtTimeOfLatestSnapshot, statistics.NumberOfPersistedEventsAtTimeOfLatestSnapshot);
+                Assert.Equal(greatestSnapshotId, statistics.GreatestSnapshotId);
             }
         }
 
@@ -291,8 +291,8 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                         {
                             EntityTypeName = $"Test Entity Type Name {Random.Next(0, 4)}",
                             EntityId = Guid.NewGuid(),
-                            ExpectedNumberOfPersistedEventsId = greatestEventId,
-                            ExpectedSnapshotEventId = greatestSnapshotEventId,
+                            GreatestEventId = greatestEventId,
+                            GreatestSnapshotId = greatestSnapshotEventId,
                             Steps = steps
                         };
                     })
@@ -311,9 +311,9 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                             await eventStore.PersistEvent(sequenceTemplate.EntityTypeName, sequenceTemplate.EntityId, step.EventId, step.Data);
                         }
                     }
-                    var eventIds = await eventStore.GetStatistics(sequenceTemplate.EntityTypeName, sequenceTemplate.EntityId);
-                    Assert.Equal(sequenceTemplate.ExpectedNumberOfPersistedEventsId, eventIds.NumberOfPersistedEvents);
-                    Assert.Equal(sequenceTemplate.ExpectedSnapshotEventId, eventIds.NumberOfPersistedEventsAtTimeOfLatestSnapshot);
+                    var statistics = await eventStore.GetStatistics(sequenceTemplate.EntityTypeName, sequenceTemplate.EntityId);
+                    Assert.Equal(sequenceTemplate.GreatestEventId, statistics.GreatestEventId);
+                    Assert.Equal(sequenceTemplate.GreatestSnapshotId, statistics.GreatestSnapshotId);
                     var results = new List<ImmutableArray<byte>>();
                     foreach (var step in sequenceTemplate.Steps)
                     {
