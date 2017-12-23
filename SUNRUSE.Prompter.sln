@@ -29,6 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		.travis.yml = .travis.yml
+		readme.md = readme.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SUNRUSE.Prompter.Persistence.Abstractions.TestHelpers", "SUNRUSE.Prompter.Persistence.Abstractions.TestHelpers\SUNRUSE.Prompter.Persistence.Abstractions.TestHelpers.csproj", "{DF7AA347-59E0-45F3-91C2-125B66F38BF9}"
