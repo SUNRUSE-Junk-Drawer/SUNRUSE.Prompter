@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Text;
 using Xunit;
 
 namespace SUNRUSE.Prompter.Abstractions.Tests

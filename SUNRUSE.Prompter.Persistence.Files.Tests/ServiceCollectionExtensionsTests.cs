@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SUNRUSE.Prompter.Persistence.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace SUNRUSE.Prompter.Persistence.Files.Tests
