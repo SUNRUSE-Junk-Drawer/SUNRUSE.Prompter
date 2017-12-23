@@ -53,8 +53,8 @@ namespace SUNRUSE.Prompter.Persistence.Files
         /// <inheritdoc />
         public Task<EventStoreStatistics> GetStatistics(string entityTypeName, Guid entityId)
         {
-            var greatestEventId = 0;
-            var greatestSnapshotId = 0;
+            var greatestEventId = (int?)null;
+            var greatestSnapshotId = (int?)null;
 
             var eventsPath = GetEventsPath(entityTypeName, entityId);
             if (Directory.Exists(eventsPath))
@@ -62,8 +62,8 @@ namespace SUNRUSE.Prompter.Persistence.Files
                 greatestEventId = Directory
                     .EnumerateFiles(eventsPath)
                     .Select(filename => int.Parse(Path.GetFileName(filename)))
-                    .DefaultIfEmpty(-1)
-                    .Max() + 1;
+                    .Cast<int?>()
+                    .Max();
 
                 var snapshotsPath = GetSnapshotsPath(entityTypeName, entityId);
                 if (Directory.Exists(snapshotsPath))
@@ -71,7 +71,7 @@ namespace SUNRUSE.Prompter.Persistence.Files
                     greatestSnapshotId = Directory
                         .EnumerateFiles(snapshotsPath)
                         .Select(filename => int.Parse(Path.GetFileName(filename)))
-                        .DefaultIfEmpty(0)
+                        .Cast<int?>()
                         .Max();
                 }
             }

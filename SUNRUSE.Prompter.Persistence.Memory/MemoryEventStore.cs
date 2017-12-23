@@ -40,8 +40,8 @@ namespace SUNRUSE.Prompter.Persistence.Memory
         {
             return Task.FromResult(new EventStoreStatistics
             (
-                GetEvents(entityTypeName, entityId).Keys.DefaultIfEmpty(-1).Max() + 1, 
-                GetSnapshots(entityTypeName, entityId).Keys.DefaultIfEmpty(0).Max()
+                GetEvents(entityTypeName, entityId).Keys.Cast<int?>().Max(), 
+                GetSnapshots(entityTypeName, entityId).Keys.Cast<int?>().Max()
             ));
         }
 

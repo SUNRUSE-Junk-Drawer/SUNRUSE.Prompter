@@ -32,43 +32,43 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
         ), 0);
 
         [Theory, Trait("Type", "Integration")]
-        [InlineData(false, false, false, false, false, false, false, false, 0)]
-        [InlineData(true, false, false, false, false, false, false, false, 0)]
-        [InlineData(true, true, false, false, false, false, false, false, 5)]
-        [InlineData(true, true, true, false, false, false, false, false, 5)]
-        [InlineData(true, true, false, true, false, false, false, false, 5)]
-        [InlineData(true, true, true, true, false, false, false, false, 5)]
-        [InlineData(true, true, false, false, true, false, false, false, 5)]
-        [InlineData(true, true, true, false, true, false, false, false, 5)]
-        [InlineData(true, false, false, false, false, true, false, false, 6)]
-        [InlineData(true, false, false, false, false, true, true, false, 6)]
-        [InlineData(true, false, false, false, false, true, false, true, 6)]
-        [InlineData(true, false, false, false, false, true, true, true, 6)]
-        [InlineData(true, true, false, false, false, true, false, false, 11)]
-        [InlineData(true, true, false, false, false, true, true, false, 11)]
-        [InlineData(true, true, false, false, false, true, false, true, 11)]
-        [InlineData(true, true, false, false, false, true, true, true, 11)]
-        [InlineData(true, true, true, false, false, true, false, false, 11)]
-        [InlineData(true, true, true, false, false, true, true, false, 11)]
-        [InlineData(true, true, true, false, false, true, false, true, 11)]
-        [InlineData(true, true, true, false, false, true, true, true, 11)]
-        [InlineData(true, true, false, true, false, true, false, false, 11)]
-        [InlineData(true, true, false, true, false, true, true, false, 11)]
-        [InlineData(true, true, false, true, false, true, false, true, 11)]
-        [InlineData(true, true, false, true, false, true, true, true, 11)]
-        [InlineData(true, true, true, true, false, true, false, false, 11)]
-        [InlineData(true, true, true, true, false, true, true, false, 11)]
-        [InlineData(true, true, true, true, false, true, false, true, 11)]
-        [InlineData(true, true, true, true, false, true, true, true, 11)]
-        [InlineData(true, true, false, false, true, true, false, false, 11)]
-        [InlineData(true, true, false, false, true, true, true, false, 11)]
-        [InlineData(true, true, false, false, true, true, false, true, 11)]
-        [InlineData(true, true, false, false, true, true, true, true, 11)]
-        [InlineData(true, true, true, false, true, true, false, false, 11)]
-        [InlineData(true, true, true, false, true, true, true, false, 11)]
-        [InlineData(true, true, true, false, true, true, false, true, 11)]
-        [InlineData(true, true, true, false, true, true, true, true, 11)]
-        public async Task GetStatisticsGreatestEventIDWithRestart(bool includesCompetingSequences, bool previousSessionIncludesEvents, bool previousSessionIncludesSnapshots, bool previousSessionEndsWithSnapshot, bool thisSessionStartsWithSnapshot, bool thisSessionIncludesEvents, bool thisSessionIncludesSnapshots, bool thisSessionEndsWithSnapshot, int greatestEventId)
+        [InlineData(false, false, false, false, false, false, false, false, null)]
+        [InlineData(true, false, false, false, false, false, false, false, null)]
+        [InlineData(true, true, false, false, false, false, false, false, 4)]
+        [InlineData(true, true, true, false, false, false, false, false, 4)]
+        [InlineData(true, true, false, true, false, false, false, false, 4)]
+        [InlineData(true, true, true, true, false, false, false, false, 4)]
+        [InlineData(true, true, false, false, true, false, false, false, 4)]
+        [InlineData(true, true, true, false, true, false, false, false, 4)]
+        [InlineData(true, false, false, false, false, true, false, false, 5)]
+        [InlineData(true, false, false, false, false, true, true, false, 5)]
+        [InlineData(true, false, false, false, false, true, false, true, 5)]
+        [InlineData(true, false, false, false, false, true, true, true, 5)]
+        [InlineData(true, true, false, false, false, true, false, false, 10)]
+        [InlineData(true, true, false, false, false, true, true, false, 10)]
+        [InlineData(true, true, false, false, false, true, false, true, 10)]
+        [InlineData(true, true, false, false, false, true, true, true, 10)]
+        [InlineData(true, true, true, false, false, true, false, false, 10)]
+        [InlineData(true, true, true, false, false, true, true, false, 10)]
+        [InlineData(true, true, true, false, false, true, false, true, 10)]
+        [InlineData(true, true, true, false, false, true, true, true, 10)]
+        [InlineData(true, true, false, true, false, true, false, false, 10)]
+        [InlineData(true, true, false, true, false, true, true, false, 10)]
+        [InlineData(true, true, false, true, false, true, false, true, 10)]
+        [InlineData(true, true, false, true, false, true, true, true, 10)]
+        [InlineData(true, true, true, true, false, true, false, false, 10)]
+        [InlineData(true, true, true, true, false, true, true, false, 10)]
+        [InlineData(true, true, true, true, false, true, false, true, 10)]
+        [InlineData(true, true, true, true, false, true, true, true, 10)]
+        [InlineData(true, true, false, false, true, true, false, false, 10)]
+        [InlineData(true, true, false, false, true, true, true, false, 10)]
+        [InlineData(true, true, false, false, true, true, false, true, 10)]
+        [InlineData(true, true, false, false, true, true, true, true, 10)]
+        [InlineData(true, true, true, false, true, true, false, false, 10)]
+        [InlineData(true, true, true, false, true, true, true, false, 10)]
+        [InlineData(true, true, true, false, true, true, false, true, 10)]
+        [InlineData(true, true, true, false, true, true, true, true, 10)]
+        public async Task GetStatisticsGreatestEventIDWithRestart(bool includesCompetingSequences, bool previousSessionIncludesEvents, bool previousSessionIncludesSnapshots, bool previousSessionEndsWithSnapshot, bool thisSessionStartsWithSnapshot, bool thisSessionIncludesEvents, bool thisSessionIncludesSnapshots, bool thisSessionEndsWithSnapshot, int? greatestEventId)
         {
             var previousSessionSteps = new List<Step>();
             if (previousSessionIncludesEvents) previousSessionSteps.Add(new Step(false, CreateTestData()));
@@ -117,43 +117,43 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
         }
 
         [Theory, Trait("Type", "Integration")]
-        [InlineData(false, false, false, false, false, false, false, false, 0)]
-        [InlineData(true, false, false, false, false, false, false, false, 0)]
-        [InlineData(true, true, false, false, false, false, false, false, 0)]
-        [InlineData(true, true, true, false, false, false, false, false, 4)]
-        [InlineData(true, true, false, true, false, false, false, false, 5)]
-        [InlineData(true, true, true, true, false, false, false, false, 5)]
-        [InlineData(true, true, false, false, true, false, false, false, 5)]
-        [InlineData(true, true, true, false, true, false, false, false, 5)]
-        [InlineData(true, false, false, false, false, true, false, false, 0)]
-        [InlineData(true, false, false, false, false, true, true, false, 4)]
-        [InlineData(true, false, false, false, false, true, false, true, 6)]
-        [InlineData(true, false, false, false, false, true, true, true, 6)]
-        [InlineData(true, true, false, false, false, true, false, false, 0)]
-        [InlineData(true, true, false, false, false, true, true, false, 9)]
-        [InlineData(true, true, false, false, false, true, false, true, 11)]
-        [InlineData(true, true, false, false, false, true, true, true, 11)]
-        [InlineData(true, true, true, false, false, true, false, false, 4)]
-        [InlineData(true, true, true, false, false, true, true, false, 9)]
-        [InlineData(true, true, true, false, false, true, false, true, 11)]
-        [InlineData(true, true, true, false, false, true, true, true, 11)]
-        [InlineData(true, true, false, true, false, true, false, false, 5)]
-        [InlineData(true, true, false, true, false, true, true, false, 9)]
-        [InlineData(true, true, false, true, false, true, false, true, 11)]
-        [InlineData(true, true, false, true, false, true, true, true, 11)]
-        [InlineData(true, true, true, true, false, true, false, false, 5)]
-        [InlineData(true, true, true, true, false, true, true, false, 9)]
-        [InlineData(true, true, true, true, false, true, false, true, 11)]
-        [InlineData(true, true, true, true, false, true, true, true, 11)]
-        [InlineData(true, true, false, false, true, true, false, false, 5)]
-        [InlineData(true, true, false, false, true, true, true, false, 9)]
-        [InlineData(true, true, false, false, true, true, false, true, 11)]
-        [InlineData(true, true, false, false, true, true, true, true, 11)]
-        [InlineData(true, true, true, false, true, true, false, false, 5)]
-        [InlineData(true, true, true, false, true, true, true, false, 9)]
-        [InlineData(true, true, true, false, true, true, false, true, 11)]
-        [InlineData(true, true, true, false, true, true, true, true, 11)]
-        public async Task GetStatisticsGreatestSnapshotIdWithRestart(bool includesCompetingSequences, bool previousSessionIncludesEvents, bool previousSessionIncludesSnapshots, bool previousSessionEndsWithSnapshot, bool thisSessionStartsWithSnapshot, bool thisSessionIncludesEvents, bool thisSessionIncludesSnapshots, bool thisSessionEndsWithSnapshot, int greatestSnapshotId)
+        [InlineData(false, false, false, false, false, false, false, false, null)]
+        [InlineData(true, false, false, false, false, false, false, false, null)]
+        [InlineData(true, true, false, false, false, false, false, false, null)]
+        [InlineData(true, true, true, false, false, false, false, false, 3)]
+        [InlineData(true, true, false, true, false, false, false, false, 4)]
+        [InlineData(true, true, true, true, false, false, false, false, 4)]
+        [InlineData(true, true, false, false, true, false, false, false, 4)]
+        [InlineData(true, true, true, false, true, false, false, false, 4)]
+        [InlineData(true, false, false, false, false, true, false, false, null)]
+        [InlineData(true, false, false, false, false, true, true, false, 3)]
+        [InlineData(true, false, false, false, false, true, false, true, 5)]
+        [InlineData(true, false, false, false, false, true, true, true, 5)]
+        [InlineData(true, true, false, false, false, true, false, false, null)]
+        [InlineData(true, true, false, false, false, true, true, false, 8)]
+        [InlineData(true, true, false, false, false, true, false, true, 10)]
+        [InlineData(true, true, false, false, false, true, true, true, 10)]
+        [InlineData(true, true, true, false, false, true, false, false, 3)]
+        [InlineData(true, true, true, false, false, true, true, false, 8)]
+        [InlineData(true, true, true, false, false, true, false, true, 10)]
+        [InlineData(true, true, true, false, false, true, true, true, 10)]
+        [InlineData(true, true, false, true, false, true, false, false, 4)]
+        [InlineData(true, true, false, true, false, true, true, false, 8)]
+        [InlineData(true, true, false, true, false, true, false, true, 10)]
+        [InlineData(true, true, false, true, false, true, true, true, 10)]
+        [InlineData(true, true, true, true, false, true, false, false, 4)]
+        [InlineData(true, true, true, true, false, true, true, false, 8)]
+        [InlineData(true, true, true, true, false, true, false, true, 10)]
+        [InlineData(true, true, true, true, false, true, true, true, 10)]
+        [InlineData(true, true, false, false, true, true, false, false, 4)]
+        [InlineData(true, true, false, false, true, true, true, false, 8)]
+        [InlineData(true, true, false, false, true, true, false, true, 10)]
+        [InlineData(true, true, false, false, true, true, true, true, 10)]
+        [InlineData(true, true, true, false, true, true, false, false, 4)]
+        [InlineData(true, true, true, false, true, true, true, false, 8)]
+        [InlineData(true, true, true, false, true, true, false, true, 10)]
+        [InlineData(true, true, true, false, true, true, true, true, 10)]
+        public async Task GetStatisticsGreatestSnapshotIdWithRestart(bool includesCompetingSequences, bool previousSessionIncludesEvents, bool previousSessionIncludesSnapshots, bool previousSessionEndsWithSnapshot, bool thisSessionStartsWithSnapshot, bool thisSessionIncludesEvents, bool thisSessionIncludesSnapshots, bool thisSessionEndsWithSnapshot, int? greatestSnapshotId)
         {
             var previousSessionSteps = new List<Step>();
             if (previousSessionIncludesEvents) previousSessionSteps.Add(new Step(false, CreateTestData()));
@@ -377,7 +377,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                 await InsertInterleaved(eventStore, sequences.ToImmutableArray());
                 var actual = new List<ImmutableArray<byte>>();
 
-                while (actual.Count < expected.Count()) actual.Add(await eventStore.GetSnapshot(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, previousSessionSteps.Concat(thisSessionSteps).TakeWhile(step => step.Data != expected[actual.Count]).Count(step => !step.IsSnapshot)));
+                while (actual.Count < expected.Count()) actual.Add(await eventStore.GetSnapshot(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, previousSessionSteps.Concat(thisSessionSteps).TakeWhile(step => step.Data != expected[actual.Count]).Count(step => !step.IsSnapshot) - 1));
 
                 Assert.Equal(expected, actual);
             }
@@ -392,15 +392,22 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                     .Range(0, 150)
                     .Select(i =>
                     {
-                        var greatestEventId = 0;
-                        var greatestSnapshotId = 0;
+                        var greatestEventId = -1;
+                        var greatestSnapshotId = (int?)null;
 
                         var steps = Enumerable
                             .Range(0, Random.Next(25, 50))
                             .Select(step =>
                             {
                                 var isSnapshot = step % 2 == 1 && Random.Next(0, 2) == 0;
-                                if (isSnapshot) greatestSnapshotId = greatestEventId;
+                                if (isSnapshot)
+                                {
+                                    greatestSnapshotId = greatestEventId;
+                                }
+                                else
+                                {
+                                    greatestEventId++;
+                                }
 
                                 var output = new
                                 {
@@ -408,8 +415,6 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                                     Data = CreateTestData(),
                                     EventId = greatestEventId
                                 };
-
-                                if (!isSnapshot) greatestEventId++;
 
                                 return output;
                             })
@@ -464,7 +469,14 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                             .Select(step =>
                             {
                                 var isSnapshot = greatestEventId != greatestSnapshotId && Random.Next(0, 2) == 0;
-                                if (isSnapshot) greatestSnapshotId = greatestEventId;
+                                if (isSnapshot)
+                                {
+                                    greatestSnapshotId = greatestEventId;
+                                }
+                                else
+                                {
+                                    greatestEventId++;
+                                }
 
                                 var output = new
                                 {
@@ -472,8 +484,6 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                                     Data = CreateTestData(),
                                     EventId = greatestEventId
                                 };
-
-                                if (!isSnapshot) greatestEventId++;
 
                                 return output;
                             })

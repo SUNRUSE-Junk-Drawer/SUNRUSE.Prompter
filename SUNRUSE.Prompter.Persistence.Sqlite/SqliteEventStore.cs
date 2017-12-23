@@ -152,7 +152,7 @@ namespace SUNRUSE.Prompter.Persistence.Sqlite
                 command.CommandText = @"
                     SELECT (
                         SELECT 
-                            COUNT(1) 
+                            MAX(number_of_events_at_time_of_creation)
                         FROM 
                             prompter_v1_event 
                         WHERE
@@ -160,7 +160,7 @@ namespace SUNRUSE.Prompter.Persistence.Sqlite
                             AND entity_id = @entity_id
                     ) number_of_events, (
                         SELECT 
-                            COALESCE(MAX(number_of_events_at_time_of_creation), 0)
+                            MAX(number_of_events_at_time_of_creation)
                         FROM 
                             prompter_v1_snapshot
                         WHERE
@@ -173,7 +173,9 @@ namespace SUNRUSE.Prompter.Persistence.Sqlite
                 using (var reader = await command.ExecuteReaderAsync())
                 {
                     reader.Read();
-                    return new EventStoreStatistics((int)(long)reader["number_of_events"], (int)(long)reader["number_of_events_at_time_of_latest_snapshot_creation"]);
+                    var numberOfEvents = reader["number_of_events"];
+                    var numberOfEventsAtTimeOfLatestSnapshotCreation = reader["number_of_events_at_time_of_latest_snapshot_creation"];
+                    return new EventStoreStatistics(numberOfEvents == DBNull.Value ? null : (int?)(long)numberOfEvents, numberOfEventsAtTimeOfLatestSnapshotCreation == DBNull.Value ? null : (int?)(long)numberOfEventsAtTimeOfLatestSnapshotCreation);
                 }
             }
         }

@@ -7,14 +7,14 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions
     /// <summary>Describes the event IDs of a specific entity.</summary>
     public struct EventStoreStatistics
     {
-        /// <summary>The greatest event ID.</summary>
-        public readonly int GreatestEventId;
+        /// <summary>The greatest event ID, or <see langword="null"/> if none.</summary>
+        public readonly int? GreatestEventId;
 
-        /// <summary>The greatest snapshot ID.</summary>
-        public readonly int GreatestSnapshotId;
+        /// <summary>The greatest snapshot ID, or <see langword="null"/> if none.</summary>
+        public readonly int? GreatestSnapshotId;
 
         /// <inheritdoc />
-        public EventStoreStatistics(int greatestEventId, int greatestSnapshotId)
+        public EventStoreStatistics(int? greatestEventId, int? greatestSnapshotId)
         {
             GreatestEventId = greatestEventId;
             GreatestSnapshotId = greatestSnapshotId;

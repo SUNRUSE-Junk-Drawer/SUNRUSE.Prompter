@@ -69,7 +69,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                         var step = sequence.Steps[j];
                         if (step.IsSnapshot)
                         {
-                            await eventStore.PersistSnapshot(sequence.EntityTypeName, sequence.EntityId, sequence.StartingEventId + sequence.Steps.Take(j).Count(found => !found.IsSnapshot), step.Data);
+                            await eventStore.PersistSnapshot(sequence.EntityTypeName, sequence.EntityId, sequence.StartingEventId + sequence.Steps.Take(j).Count(found => !found.IsSnapshot) - 1, step.Data);
                         }
                         else
                         {
@@ -108,13 +108,13 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
         ), 0);
 
         [Theory, Trait("Type", "Integration")]
-        [InlineData(false, false, false, false, 0)]
-        [InlineData(true, false, false, false, 0)]
-        [InlineData(true, true, false, false, 5)]
-        [InlineData(true, true, true, false, 5)]
-        [InlineData(true, true, true, true, 5)]
-        [InlineData(true, true, false, true, 5)]
-        public async Task GetStatisticsGreatestEventIdWithoutRestarting(bool includesCompetingSequences, bool includesEvents, bool includesSnapshots, bool endsWithSnapshot, int greatestEventId)
+        [InlineData(false, false, false, false, null)]
+        [InlineData(true, false, false, false, null)]
+        [InlineData(true, true, false, false, 4)]
+        [InlineData(true, true, true, false, 4)]
+        [InlineData(true, true, true, true, 4)]
+        [InlineData(true, true, false, true, 4)]
+        public async Task GetStatisticsGreatestEventIdWithoutRestarting(bool includesCompetingSequences, bool includesEvents, bool includesSnapshots, bool endsWithSnapshot, int? greatestEventId)
         {
             using (var eventStore = CreateInstance())
             {
@@ -142,13 +142,13 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
         }
 
         [Theory, Trait("Type", "Integration")]
-        [InlineData(false, false, false, false, 0)]
-        [InlineData(true, false, false, false, 0)]
-        [InlineData(true, true, false, false, 0)]
-        [InlineData(true, true, true, false, 4)]
-        [InlineData(true, true, true, true, 5)]
-        [InlineData(true, true, false, true, 5)]
-        public async Task GetStatisticsGreatestSnapshotIdWithoutRestarting(bool includesCompetingSequences, bool includesEvents, bool includesSnapshots, bool endsWithSnapshot, int greatestSnapshotId)
+        [InlineData(false, false, false, false, null)]
+        [InlineData(true, false, false, false, null)]
+        [InlineData(true, true, false, false, null)]
+        [InlineData(true, true, true, false, 3)]
+        [InlineData(true, true, true, true, 4)]
+        [InlineData(true, true, false, true, 4)]
+        public async Task GetStatisticsGreatestSnapshotIdWithoutRestarting(bool includesCompetingSequences, bool includesEvents, bool includesSnapshots, bool endsWithSnapshot, int? greatestSnapshotId)
         {
             using (var eventStore = CreateInstance())
             {
@@ -247,7 +247,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                 await InsertInterleaved(eventStore, sequences.ToImmutableArray());
                 var actual = new List<ImmutableArray<byte>>();
 
-                while (actual.Count < expected.Count()) actual.Add(await eventStore.GetSnapshot(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, steps.TakeWhile(step => step.Data != expected[actual.Count]).Count(step => !step.IsSnapshot)));
+                while (actual.Count < expected.Count()) actual.Add(await eventStore.GetSnapshot(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, steps.TakeWhile(step => step.Data != expected[actual.Count]).Count(step => !step.IsSnapshot) - 1));
 
                 Assert.Equal(expected, actual);
             }
@@ -262,15 +262,22 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                     .Range(0, 150)
                     .Select(i =>
                     {
-                        var greatestEventId = 0;
-                        var greatestSnapshotEventId = 0;
+                        var greatestEventId = -1;
+                        var greatestSnapshotEventId = (int?)null;
 
                         var steps = Enumerable
                             .Range(0, Random.Next(25, 50))
                             .Select(step =>
                             {
                                 var isSnapshot = step % 2 == 1 && Random.Next(0, 2) == 0;
-                                if (isSnapshot) greatestSnapshotEventId = greatestEventId;
+                                if (isSnapshot)
+                                {
+                                    greatestSnapshotEventId = greatestEventId;
+                                }
+                                else
+                                {
+                                    greatestEventId++;
+                                }
 
                                 var output = new
                                 {
@@ -278,8 +285,6 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                                     Data = CreateTestData(),
                                     EventId = greatestEventId
                                 };
-
-                                if (!isSnapshot) greatestEventId++;
 
                                 return output;
                             })
