@@ -10,42 +10,43 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
     public abstract class EventStoreTestsBase : NonRestartableEventStoreTestsBase
     {
         [Theory, Trait("Type", "Integration")]
-        [InlineData(false, false, false, false, false, false, false, 0)]
-        [InlineData(true, false, false, false, false, false, false, 5)]
-        [InlineData(true, true, false, false, false, false, false, 5)]
-        [InlineData(true, false, true, false, false, false, false, 5)]
-        [InlineData(true, true, true, false, false, false, false, 5)]
-        [InlineData(true, false, false, true, false, false, false, 5)]
-        [InlineData(true, true, false, true, false, false, false, 5)]
-        [InlineData(false, false, false, false, true, false, false, 6)]
-        [InlineData(false, false, false, false, true, true, false, 6)]
-        [InlineData(false, false, false, false, true, false, true, 6)]
-        [InlineData(false, false, false, false, true, true, true, 6)]
-        [InlineData(true, false, false, false, true, false, false, 11)]
-        [InlineData(true, false, false, false, true, true, false, 11)]
-        [InlineData(true, false, false, false, true, false, true, 11)]
-        [InlineData(true, false, false, false, true, true, true, 11)]
-        [InlineData(true, true, false, false, true, false, false, 11)]
-        [InlineData(true, true, false, false, true, true, false, 11)]
-        [InlineData(true, true, false, false, true, false, true, 11)]
-        [InlineData(true, true, false, false, true, true, true, 11)]
-        [InlineData(true, false, true, false, true, false, false, 11)]
-        [InlineData(true, false, true, false, true, true, false, 11)]
-        [InlineData(true, false, true, false, true, false, true, 11)]
-        [InlineData(true, false, true, false, true, true, true, 11)]
-        [InlineData(true, true, true, false, true, false, false, 11)]
-        [InlineData(true, true, true, false, true, true, false, 11)]
-        [InlineData(true, true, true, false, true, false, true, 11)]
-        [InlineData(true, true, true, false, true, true, true, 11)]
-        [InlineData(true, false, false, true, true, false, false, 11)]
-        [InlineData(true, false, false, true, true, true, false, 11)]
-        [InlineData(true, false, false, true, true, false, true, 11)]
-        [InlineData(true, false, false, true, true, true, true, 11)]
-        [InlineData(true, true, false, true, true, false, false, 11)]
-        [InlineData(true, true, false, true, true, true, false, 11)]
-        [InlineData(true, true, false, true, true, false, true, 11)]
-        [InlineData(true, true, false, true, true, true, true, 11)]
-        public async Task GetStatisticsNumberOfPersistedEventsWithRestart(bool previousSessionIncludesEvents, bool previousSessionIncludesSnapshots, bool previousSessionEndsWithSnapshot, bool thisSessionStartsWithSnapshot, bool thisSessionIncludesEvents, bool thisSessionIncludesSnapshots, bool thisSessionEndsWithSnapshot, int numberOfPersistedEvents)
+        [InlineData(false, false, false, false, false, false, false, false, 0)]
+        [InlineData(true, false, false, false, false, false, false, false, 0)]
+        [InlineData(true, true, false, false, false, false, false, false, 5)]
+        [InlineData(true, true, true, false, false, false, false, false, 5)]
+        [InlineData(true, true, false, true, false, false, false, false, 5)]
+        [InlineData(true, true, true, true, false, false, false, false, 5)]
+        [InlineData(true, true, false, false, true, false, false, false, 5)]
+        [InlineData(true, true, true, false, true, false, false, false, 5)]
+        [InlineData(true, false, false, false, false, true, false, false, 6)]
+        [InlineData(true, false, false, false, false, true, true, false, 6)]
+        [InlineData(true, false, false, false, false, true, false, true, 6)]
+        [InlineData(true, false, false, false, false, true, true, true, 6)]
+        [InlineData(true, true, false, false, false, true, false, false, 11)]
+        [InlineData(true, true, false, false, false, true, true, false, 11)]
+        [InlineData(true, true, false, false, false, true, false, true, 11)]
+        [InlineData(true, true, false, false, false, true, true, true, 11)]
+        [InlineData(true, true, true, false, false, true, false, false, 11)]
+        [InlineData(true, true, true, false, false, true, true, false, 11)]
+        [InlineData(true, true, true, false, false, true, false, true, 11)]
+        [InlineData(true, true, true, false, false, true, true, true, 11)]
+        [InlineData(true, true, false, true, false, true, false, false, 11)]
+        [InlineData(true, true, false, true, false, true, true, false, 11)]
+        [InlineData(true, true, false, true, false, true, false, true, 11)]
+        [InlineData(true, true, false, true, false, true, true, true, 11)]
+        [InlineData(true, true, true, true, false, true, false, false, 11)]
+        [InlineData(true, true, true, true, false, true, true, false, 11)]
+        [InlineData(true, true, true, true, false, true, false, true, 11)]
+        [InlineData(true, true, true, true, false, true, true, true, 11)]
+        [InlineData(true, true, false, false, true, true, false, false, 11)]
+        [InlineData(true, true, false, false, true, true, true, false, 11)]
+        [InlineData(true, true, false, false, true, true, false, true, 11)]
+        [InlineData(true, true, false, false, true, true, true, true, 11)]
+        [InlineData(true, true, true, false, true, true, false, false, 11)]
+        [InlineData(true, true, true, false, true, true, true, false, 11)]
+        [InlineData(true, true, true, false, true, true, false, true, 11)]
+        [InlineData(true, true, true, false, true, true, true, true, 11)]
+        public async Task GetStatisticsNumberOfPersistedEventsWithRestart(bool includesCompetingSequences, bool previousSessionIncludesEvents, bool previousSessionIncludesSnapshots, bool previousSessionEndsWithSnapshot, bool thisSessionStartsWithSnapshot, bool thisSessionIncludesEvents, bool thisSessionIncludesSnapshots, bool thisSessionEndsWithSnapshot, int numberOfPersistedEvents)
         {
             var previousSessionSteps = new List<Step>();
             if (previousSessionIncludesEvents) previousSessionSteps.Add(new Step(false, CreateTestData()));
@@ -58,7 +59,13 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
             if (previousSessionEndsWithSnapshot) previousSessionSteps.Add(new Step(true, CreateTestData()));
             using (var eventStore = CreateInstance())
             {
-                await InsertInterleaved(eventStore, CompetingSequenceWithSameEntityTypeName, CompetingSequenceWithSameEntityId, new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, previousSessionSteps.ToImmutableArray()));
+                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, previousSessionSteps.ToImmutableArray()) };
+                if (includesCompetingSequences)
+                {
+                    sequences.Add(CompetingSequenceWithSameEntityTypeName);
+                    sequences.Add(CompetingSequenceWithSameEntityId);
+                }
+                await InsertInterleaved(eventStore, sequences.ToImmutableArray());
             }
             var thisSessionSteps = new List<Step>();
             if (thisSessionStartsWithSnapshot) thisSessionSteps.Add(new Step(true, CreateTestData()));
@@ -73,7 +80,13 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
             if (thisSessionEndsWithSnapshot) thisSessionSteps.Add(new Step(true, CreateTestData()));
             using (var eventStore = CreateInstance())
             {
-                await InsertInterleaved(eventStore, CompetingSequenceWithSameEntityTypeName, CompetingSequenceWithSameEntityId, new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, thisSessionSteps.ToImmutableArray()));
+                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, thisSessionSteps.ToImmutableArray()) };
+                if (includesCompetingSequences)
+                {
+                    sequences.Add(CompetingSequenceWithSameEntityTypeName);
+                    sequences.Add(CompetingSequenceWithSameEntityId);
+                }
+                await InsertInterleaved(eventStore, sequences.ToImmutableArray());
 
                 var statistics = await eventStore.GetStatistics(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId);
 
@@ -82,42 +95,43 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
         }
 
         [Theory, Trait("Type", "Integration")]
-        [InlineData(false, false, false, false, false, false, false, 0)]
-        [InlineData(true, false, false, false, false, false, false, 0)]
-        [InlineData(true, true, false, false, false, false, false, 4)]
-        [InlineData(true, false, true, false, false, false, false, 5)]
-        [InlineData(true, true, true, false, false, false, false, 5)]
-        [InlineData(true, false, false, true, false, false, false, 5)]
-        [InlineData(true, true, false, true, false, false, false, 5)]
-        [InlineData(false, false, false, false, true, false, false, 0)]
-        [InlineData(false, false, false, false, true, true, false, 4)]
-        [InlineData(false, false, false, false, true, false, true, 6)]
-        [InlineData(false, false, false, false, true, true, true, 6)]
-        [InlineData(true, false, false, false, true, false, false, 0)]
-        [InlineData(true, false, false, false, true, true, false, 9)]
-        [InlineData(true, false, false, false, true, false, true, 11)]
-        [InlineData(true, false, false, false, true, true, true, 11)]
-        [InlineData(true, true, false, false, true, false, false, 4)]
-        [InlineData(true, true, false, false, true, true, false, 9)]
-        [InlineData(true, true, false, false, true, false, true, 11)]
-        [InlineData(true, true, false, false, true, true, true, 11)]
-        [InlineData(true, false, true, false, true, false, false, 5)]
-        [InlineData(true, false, true, false, true, true, false, 9)]
-        [InlineData(true, false, true, false, true, false, true, 11)]
-        [InlineData(true, false, true, false, true, true, true, 11)]
-        [InlineData(true, true, true, false, true, false, false, 5)]
-        [InlineData(true, true, true, false, true, true, false, 9)]
-        [InlineData(true, true, true, false, true, false, true, 11)]
-        [InlineData(true, true, true, false, true, true, true, 11)]
-        [InlineData(true, false, false, true, true, false, false, 5)]
-        [InlineData(true, false, false, true, true, true, false, 9)]
-        [InlineData(true, false, false, true, true, false, true, 11)]
-        [InlineData(true, false, false, true, true, true, true, 11)]
-        [InlineData(true, true, false, true, true, false, false, 5)]
-        [InlineData(true, true, false, true, true, true, false, 9)]
-        [InlineData(true, true, false, true, true, false, true, 11)]
-        [InlineData(true, true, false, true, true, true, true, 11)]
-        public async Task GetStatisticsNumberOfPersistedEventsAtTimeOfLatestSnapshotWithRestart(bool previousSessionIncludesEvents, bool previousSessionIncludesSnapshots, bool previousSessionEndsWithSnapshot, bool thisSessionStartsWithSnapshot, bool thisSessionIncludesEvents, bool thisSessionIncludesSnapshots, bool thisSessionEndsWithSnapshot, int numberOfPersistedEventsAtTimeOfLatestSnapshot)
+        [InlineData(false, false, false, false, false, false, false, false, 0)]
+        [InlineData(true, false, false, false, false, false, false, false, 0)]
+        [InlineData(true, true, false, false, false, false, false, false, 0)]
+        [InlineData(true, true, true, false, false, false, false, false, 4)]
+        [InlineData(true, true, false, true, false, false, false, false, 5)]
+        [InlineData(true, true, true, true, false, false, false, false, 5)]
+        [InlineData(true, true, false, false, true, false, false, false, 5)]
+        [InlineData(true, true, true, false, true, false, false, false, 5)]
+        [InlineData(true, false, false, false, false, true, false, false, 0)]
+        [InlineData(true, false, false, false, false, true, true, false, 4)]
+        [InlineData(true, false, false, false, false, true, false, true, 6)]
+        [InlineData(true, false, false, false, false, true, true, true, 6)]
+        [InlineData(true, true, false, false, false, true, false, false, 0)]
+        [InlineData(true, true, false, false, false, true, true, false, 9)]
+        [InlineData(true, true, false, false, false, true, false, true, 11)]
+        [InlineData(true, true, false, false, false, true, true, true, 11)]
+        [InlineData(true, true, true, false, false, true, false, false, 4)]
+        [InlineData(true, true, true, false, false, true, true, false, 9)]
+        [InlineData(true, true, true, false, false, true, false, true, 11)]
+        [InlineData(true, true, true, false, false, true, true, true, 11)]
+        [InlineData(true, true, false, true, false, true, false, false, 5)]
+        [InlineData(true, true, false, true, false, true, true, false, 9)]
+        [InlineData(true, true, false, true, false, true, false, true, 11)]
+        [InlineData(true, true, false, true, false, true, true, true, 11)]
+        [InlineData(true, true, true, true, false, true, false, false, 5)]
+        [InlineData(true, true, true, true, false, true, true, false, 9)]
+        [InlineData(true, true, true, true, false, true, false, true, 11)]
+        [InlineData(true, true, true, true, false, true, true, true, 11)]
+        [InlineData(true, true, false, false, true, true, false, false, 5)]
+        [InlineData(true, true, false, false, true, true, true, false, 9)]
+        [InlineData(true, true, false, false, true, true, false, true, 11)]
+        [InlineData(true, true, false, false, true, true, true, true, 11)]
+        [InlineData(true, true, true, false, true, true, false, false, 5)]
+        [InlineData(true, true, true, false, true, true, true, false, 9)]
+        [InlineData(true, true, true, false, true, true, false, true, 11)]
+        [InlineData(true, true, true, false, true, true, true, true, 11)]
+        public async Task GetStatisticsNumberOfPersistedEventsAtTimeOfLatestSnapshotWithRestart(bool includesCompetingSequences, bool previousSessionIncludesEvents, bool previousSessionIncludesSnapshots, bool previousSessionEndsWithSnapshot, bool thisSessionStartsWithSnapshot, bool thisSessionIncludesEvents, bool thisSessionIncludesSnapshots, bool thisSessionEndsWithSnapshot, int numberOfPersistedEventsAtTimeOfLatestSnapshot)
         {
             var previousSessionSteps = new List<Step>();
             if (previousSessionIncludesEvents) previousSessionSteps.Add(new Step(false, CreateTestData()));
@@ -130,7 +144,13 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
             if (previousSessionEndsWithSnapshot) previousSessionSteps.Add(new Step(true, CreateTestData()));
             using (var eventStore = CreateInstance())
             {
-                await InsertInterleaved(eventStore, CompetingSequenceWithSameEntityTypeName, CompetingSequenceWithSameEntityId, new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, previousSessionSteps.ToImmutableArray()));
+                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, previousSessionSteps.ToImmutableArray()) };
+                if (includesCompetingSequences)
+                {
+                    sequences.Add(CompetingSequenceWithSameEntityTypeName);
+                    sequences.Add(CompetingSequenceWithSameEntityId);
+                }
+                await InsertInterleaved(eventStore, sequences.ToImmutableArray());
             }
             var thisSessionSteps = new List<Step>();
             if (thisSessionStartsWithSnapshot) thisSessionSteps.Add(new Step(true, CreateTestData()));
@@ -145,7 +165,13 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
             if (thisSessionEndsWithSnapshot) thisSessionSteps.Add(new Step(true, CreateTestData()));
             using (var eventStore = CreateInstance())
             {
-                await InsertInterleaved(eventStore, CompetingSequenceWithSameEntityTypeName, CompetingSequenceWithSameEntityId, new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, thisSessionSteps.ToImmutableArray()));
+                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, thisSessionSteps.ToImmutableArray()) };
+                if (includesCompetingSequences)
+                {
+                    sequences.Add(CompetingSequenceWithSameEntityTypeName);
+                    sequences.Add(CompetingSequenceWithSameEntityId);
+                }
+                await InsertInterleaved(eventStore, sequences.ToImmutableArray());
 
                 var statistics = await eventStore.GetStatistics(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId);
 
@@ -154,42 +180,43 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
         }
 
         [Theory, Trait("Type", "Integration")]
-        [InlineData(false, false, false, false, false, false, false)]
-        [InlineData(true, false, false, false, false, false, false)]
-        [InlineData(true, true, false, false, false, false, false)]
-        [InlineData(true, false, true, false, false, false, false)]
-        [InlineData(true, true, true, false, false, false, false)]
-        [InlineData(true, false, false, true, false, false, false)]
-        [InlineData(true, true, false, true, false, false, false)]
-        [InlineData(false, false, false, false, true, false, false)]
-        [InlineData(false, false, false, false, true, true, false)]
-        [InlineData(false, false, false, false, true, false, true)]
-        [InlineData(false, false, false, false, true, true, true)]
-        [InlineData(true, false, false, false, true, false, false)]
-        [InlineData(true, false, false, false, true, true, false)]
-        [InlineData(true, false, false, false, true, false, true)]
-        [InlineData(true, false, false, false, true, true, true)]
-        [InlineData(true, true, false, false, true, false, false)]
-        [InlineData(true, true, false, false, true, true, false)]
-        [InlineData(true, true, false, false, true, false, true)]
-        [InlineData(true, true, false, false, true, true, true)]
-        [InlineData(true, false, true, false, true, false, false)]
-        [InlineData(true, false, true, false, true, true, false)]
-        [InlineData(true, false, true, false, true, false, true)]
-        [InlineData(true, false, true, false, true, true, true)]
-        [InlineData(true, true, true, false, true, false, false)]
-        [InlineData(true, true, true, false, true, true, false)]
-        [InlineData(true, true, true, false, true, false, true)]
-        [InlineData(true, true, true, false, true, true, true)]
-        [InlineData(true, false, false, true, true, false, false)]
-        [InlineData(true, false, false, true, true, true, false)]
-        [InlineData(true, false, false, true, true, false, true)]
-        [InlineData(true, false, false, true, true, true, true)]
-        [InlineData(true, true, false, true, true, false, false)]
-        [InlineData(true, true, false, true, true, true, false)]
-        [InlineData(true, true, false, true, true, false, true)]
-        [InlineData(true, true, false, true, true, true, true)]
-        public async Task GetEventWithRestart(bool previousSessionIncludesEvents, bool previousSessionIncludesSnapshots, bool previousSessionEndsWithSnapshot, bool thisSessionStartsWithSnapshot, bool thisSessionIncludesEvents, bool thisSessionIncludesSnapshots, bool thisSessionEndsWithSnapshot)
+        [InlineData(false, false, false, false, false, false, false, false)]
+        [InlineData(true, false, false, false, false, false, false, false)]
+        [InlineData(true, true, false, false, false, false, false, false)]
+        [InlineData(true, true, true, false, false, false, false, false)]
+        [InlineData(true, true, false, true, false, false, false, false)]
+        [InlineData(true, true, true, true, false, false, false, false)]
+        [InlineData(true, true, false, false, true, false, false, false)]
+        [InlineData(true, true, true, false, true, false, false, false)]
+        [InlineData(true, false, false, false, false, true, false, false)]
+        [InlineData(true, false, false, false, false, true, true, false)]
+        [InlineData(true, false, false, false, false, true, false, true)]
+        [InlineData(true, false, false, false, false, true, true, true)]
+        [InlineData(true, true, false, false, false, true, false, false)]
+        [InlineData(true, true, false, false, false, true, true, false)]
+        [InlineData(true, true, false, false, false, true, false, true)]
+        [InlineData(true, true, false, false, false, true, true, true)]
+        [InlineData(true, true, true, false, false, true, false, false)]
+        [InlineData(true, true, true, false, false, true, true, false)]
+        [InlineData(true, true, true, false, false, true, false, true)]
+        [InlineData(true, true, true, false, false, true, true, true)]
+        [InlineData(true, true, false, true, false, true, false, false)]
+        [InlineData(true, true, false, true, false, true, true, false)]
+        [InlineData(true, true, false, true, false, true, false, true)]
+        [InlineData(true, true, false, true, false, true, true, true)]
+        [InlineData(true, true, true, true, false, true, false, false)]
+        [InlineData(true, true, true, true, false, true, true, false)]
+        [InlineData(true, true, true, true, false, true, false, true)]
+        [InlineData(true, true, true, true, false, true, true, true)]
+        [InlineData(true, true, false, false, true, true, false, false)]
+        [InlineData(true, true, false, false, true, true, true, false)]
+        [InlineData(true, true, false, false, true, true, false, true)]
+        [InlineData(true, true, false, false, true, true, true, true)]
+        [InlineData(true, true, true, false, true, true, false, false)]
+        [InlineData(true, true, true, false, true, true, true, false)]
+        [InlineData(true, true, true, false, true, true, false, true)]
+        [InlineData(true, true, true, false, true, true, true, true)]
+        public async Task GetEventWithRestart(bool includesCompetingSequences, bool previousSessionIncludesEvents, bool previousSessionIncludesSnapshots, bool previousSessionEndsWithSnapshot, bool thisSessionStartsWithSnapshot, bool thisSessionIncludesEvents, bool thisSessionIncludesSnapshots, bool thisSessionEndsWithSnapshot)
         {
             var previousSessionSteps = new List<Step>();
             if (previousSessionIncludesEvents) previousSessionSteps.Add(new Step(false, CreateTestData()));
@@ -202,7 +229,13 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
             if (previousSessionEndsWithSnapshot) previousSessionSteps.Add(new Step(true, CreateTestData()));
             using (var eventStore = CreateInstance())
             {
-                await InsertInterleaved(eventStore, CompetingSequenceWithSameEntityTypeName, CompetingSequenceWithSameEntityId, new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, previousSessionSteps.ToImmutableArray()));
+                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, previousSessionSteps.ToImmutableArray()) };
+                if (includesCompetingSequences)
+                {
+                    sequences.Add(CompetingSequenceWithSameEntityTypeName);
+                    sequences.Add(CompetingSequenceWithSameEntityId);
+                }
+                await InsertInterleaved(eventStore, sequences.ToImmutableArray());
             }
             var thisSessionSteps = new List<Step>();
             if (thisSessionStartsWithSnapshot) thisSessionSteps.Add(new Step(true, CreateTestData()));
@@ -217,7 +250,13 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
             if (thisSessionEndsWithSnapshot) thisSessionSteps.Add(new Step(true, CreateTestData()));
             using (var eventStore = CreateInstance())
             {
-                await InsertInterleaved(eventStore, CompetingSequenceWithSameEntityTypeName, CompetingSequenceWithSameEntityId, new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, thisSessionSteps.ToImmutableArray()));
+                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, thisSessionSteps.ToImmutableArray()) };
+                if (includesCompetingSequences)
+                {
+                    sequences.Add(CompetingSequenceWithSameEntityTypeName);
+                    sequences.Add(CompetingSequenceWithSameEntityId);
+                }
+                await InsertInterleaved(eventStore, sequences.ToImmutableArray());
                 var expected = previousSessionSteps
                     .Concat(thisSessionSteps)
                     .Where(step => !step.IsSnapshot)
@@ -232,42 +271,43 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
         }
 
         [Theory, Trait("Type", "Integration")]
-        [InlineData(false, false, false, false, false, false, false)]
-        [InlineData(true, false, false, false, false, false, false)]
-        [InlineData(true, true, false, false, false, false, false)]
-        [InlineData(true, false, true, false, false, false, false)]
-        [InlineData(true, true, true, false, false, false, false)]
-        [InlineData(true, false, false, true, false, false, false)]
-        [InlineData(true, true, false, true, false, false, false)]
-        [InlineData(false, false, false, false, true, false, false)]
-        [InlineData(false, false, false, false, true, true, false)]
-        [InlineData(false, false, false, false, true, false, true)]
-        [InlineData(false, false, false, false, true, true, true)]
-        [InlineData(true, false, false, false, true, false, false)]
-        [InlineData(true, false, false, false, true, true, false)]
-        [InlineData(true, false, false, false, true, false, true)]
-        [InlineData(true, false, false, false, true, true, true)]
-        [InlineData(true, true, false, false, true, false, false)]
-        [InlineData(true, true, false, false, true, true, false)]
-        [InlineData(true, true, false, false, true, false, true)]
-        [InlineData(true, true, false, false, true, true, true)]
-        [InlineData(true, false, true, false, true, false, false)]
-        [InlineData(true, false, true, false, true, true, false)]
-        [InlineData(true, false, true, false, true, false, true)]
-        [InlineData(true, false, true, false, true, true, true)]
-        [InlineData(true, true, true, false, true, false, false)]
-        [InlineData(true, true, true, false, true, true, false)]
-        [InlineData(true, true, true, false, true, false, true)]
-        [InlineData(true, true, true, false, true, true, true)]
-        [InlineData(true, false, false, true, true, false, false)]
-        [InlineData(true, false, false, true, true, true, false)]
-        [InlineData(true, false, false, true, true, false, true)]
-        [InlineData(true, false, false, true, true, true, true)]
-        [InlineData(true, true, false, true, true, false, false)]
-        [InlineData(true, true, false, true, true, true, false)]
-        [InlineData(true, true, false, true, true, false, true)]
-        [InlineData(true, true, false, true, true, true, true)]
-        public async Task GetSnapshotWithRestart(bool previousSessionIncludesEvents, bool previousSessionIncludesSnapshots, bool previousSessionEndsWithSnapshot, bool thisSessionStartsWithSnapshot, bool thisSessionIncludesEvents, bool thisSessionIncludesSnapshots, bool thisSessionEndsWithSnapshot)
+        [InlineData(false, false, false, false, false, false, false, false)]
+        [InlineData(true, false, false, false, false, false, false, false)]
+        [InlineData(true, true, false, false, false, false, false, false)]
+        [InlineData(true, true, true, false, false, false, false, false)]
+        [InlineData(true, true, false, true, false, false, false, false)]
+        [InlineData(true, true, true, true, false, false, false, false)]
+        [InlineData(true, true, false, false, true, false, false, false)]
+        [InlineData(true, true, true, false, true, false, false, false)]
+        [InlineData(true, false, false, false, false, true, false, false)]
+        [InlineData(true, false, false, false, false, true, true, false)]
+        [InlineData(true, false, false, false, false, true, false, true)]
+        [InlineData(true, false, false, false, false, true, true, true)]
+        [InlineData(true, true, false, false, false, true, false, false)]
+        [InlineData(true, true, false, false, false, true, true, false)]
+        [InlineData(true, true, false, false, false, true, false, true)]
+        [InlineData(true, true, false, false, false, true, true, true)]
+        [InlineData(true, true, true, false, false, true, false, false)]
+        [InlineData(true, true, true, false, false, true, true, false)]
+        [InlineData(true, true, true, false, false, true, false, true)]
+        [InlineData(true, true, true, false, false, true, true, true)]
+        [InlineData(true, true, false, true, false, true, false, false)]
+        [InlineData(true, true, false, true, false, true, true, false)]
+        [InlineData(true, true, false, true, false, true, false, true)]
+        [InlineData(true, true, false, true, false, true, true, true)]
+        [InlineData(true, true, true, true, false, true, false, false)]
+        [InlineData(true, true, true, true, false, true, true, false)]
+        [InlineData(true, true, true, true, false, true, false, true)]
+        [InlineData(true, true, true, true, false, true, true, true)]
+        [InlineData(true, true, false, false, true, true, false, false)]
+        [InlineData(true, true, false, false, true, true, true, false)]
+        [InlineData(true, true, false, false, true, true, false, true)]
+        [InlineData(true, true, false, false, true, true, true, true)]
+        [InlineData(true, true, true, false, true, true, false, false)]
+        [InlineData(true, true, true, false, true, true, true, false)]
+        [InlineData(true, true, true, false, true, true, false, true)]
+        [InlineData(true, true, true, false, true, true, true, true)]
+        public async Task GetSnapshotWithRestart(bool includesCompetingSequences, bool previousSessionIncludesEvents, bool previousSessionIncludesSnapshots, bool previousSessionEndsWithSnapshot, bool thisSessionStartsWithSnapshot, bool thisSessionIncludesEvents, bool thisSessionIncludesSnapshots, bool thisSessionEndsWithSnapshot)
         {
             var previousSessionSteps = new List<Step>();
             if (previousSessionIncludesEvents) previousSessionSteps.Add(new Step(false, CreateTestData()));
@@ -280,7 +320,13 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
             if (previousSessionEndsWithSnapshot) previousSessionSteps.Add(new Step(true, CreateTestData()));
             using (var eventStore = CreateInstance())
             {
-                await InsertInterleaved(eventStore, CompetingSequenceWithSameEntityTypeName, CompetingSequenceWithSameEntityId, new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, previousSessionSteps.ToImmutableArray()));
+                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, previousSessionSteps.ToImmutableArray()) };
+                if (includesCompetingSequences)
+                {
+                    sequences.Add(CompetingSequenceWithSameEntityTypeName);
+                    sequences.Add(CompetingSequenceWithSameEntityId);
+                }
+                await InsertInterleaved(eventStore, sequences.ToImmutableArray());
             }
             var thisSessionSteps = new List<Step>();
             if (thisSessionStartsWithSnapshot) thisSessionSteps.Add(new Step(true, CreateTestData()));
@@ -300,7 +346,13 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                     .Where(step => step.IsSnapshot)
                     .Select(step => step.Data)
                     .ToList();
-                await InsertInterleaved(eventStore, CompetingSequenceWithSameEntityTypeName, CompetingSequenceWithSameEntityId, new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, thisSessionSteps.ToImmutableArray()));
+                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, thisSessionSteps.ToImmutableArray()) };
+                if (includesCompetingSequences)
+                {
+                    sequences.Add(CompetingSequenceWithSameEntityTypeName);
+                    sequences.Add(CompetingSequenceWithSameEntityId);
+                }
+                await InsertInterleaved(eventStore, sequences.ToImmutableArray());
                 var actual = new List<ImmutableArray<byte>>();
 
                 while (actual.Count < expected.Count()) actual.Add(await eventStore.GetSnapshot(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, previousSessionSteps.Concat(thisSessionSteps).TakeWhile(step => step.Data != expected[actual.Count]).Count(step => !step.IsSnapshot)));

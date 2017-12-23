@@ -49,7 +49,7 @@ namespace SUNRUSE.Prompter.Persistence.Files.Tests
         {
             using (var eventStore = CreateInstance())
             {
-                await InsertInterleaved(eventStore, CompetingSequenceWithSameEntityTypeName, CompetingSequenceWithSameEntityId);
+                await InsertInterleaved(eventStore, ImmutableArray.Create(CompetingSequenceWithSameEntityTypeName, CompetingSequenceWithSameEntityId));
 
                 var expected = new[]
                 {

@@ -53,7 +53,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
             }
         }
 
-        protected async Task InsertInterleaved(IEventStore eventStore, params Sequence[] sequences)
+        protected async Task InsertInterleaved(IEventStore eventStore, ImmutableArray<Sequence> sequences)
         {
             var maxSteps = sequences.Max(sequence => sequence.Steps.Length);
             for (var i = 0; i < maxSteps; i++) foreach (var sequence in sequences)
@@ -106,12 +106,13 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
         ));
 
         [Theory, Trait("Type", "Integration")]
-        [InlineData(false, false, false, 0)]
-        [InlineData(true, false, false, 5)]
-        [InlineData(true, true, false, 5)]
-        [InlineData(true, true, true, 5)]
-        [InlineData(true, false, true, 5)]
-        public async Task GetStatisticsNumberOfPersistedEventsWithoutRestarting(bool includesEvents, bool includesSnapshots, bool endsWithSnapshot, int numberOfPersistedEvents)
+        [InlineData(false, false, false, false, 0)]
+        [InlineData(true, false, false, false, 0)]
+        [InlineData(true, true, false, false, 5)]
+        [InlineData(true, true, true, false, 5)]
+        [InlineData(true, true, true, true, 5)]
+        [InlineData(true, true, false, true, 5)]
+        public async Task GetStatisticsNumberOfPersistedEventsWithoutRestarting(bool includesCompetingSequences, bool includesEvents, bool includesSnapshots, bool endsWithSnapshot, int numberOfPersistedEvents)
         {
             using (var eventStore = CreateInstance())
             {
@@ -124,7 +125,13 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                 if (includesSnapshots) steps.Add(new Step(true, CreateTestData()));
                 if (includesEvents) steps.Add(new Step(false, CreateTestData()));
                 if (endsWithSnapshot) steps.Add(new Step(true, CreateTestData()));
-                await InsertInterleaved(eventStore, CompetingSequenceWithSameEntityTypeName, CompetingSequenceWithSameEntityId, new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, steps.ToImmutableArray()));
+                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, steps.ToImmutableArray()) };
+                if (includesCompetingSequences)
+                {
+                    sequences.Add(CompetingSequenceWithSameEntityTypeName);
+                    sequences.Add(CompetingSequenceWithSameEntityId);
+                }
+                await InsertInterleaved(eventStore, sequences.ToImmutableArray());
 
                 var statistics = await eventStore.GetStatistics(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId);
 
@@ -133,12 +140,13 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
         }
 
         [Theory, Trait("Type", "Integration")]
-        [InlineData(false, false, false, 0)]
-        [InlineData(true, false, false, 0)]
-        [InlineData(true, true, false, 4)]
-        [InlineData(true, true, true, 5)]
-        [InlineData(true, false, true, 5)]
-        public async Task GetStatisticsNumberOfPersistedEventsAtTimeOfLatestSnapshotWithoutRestarting(bool includesEvents, bool includesSnapshots, bool endsWithSnapshot, int numberOfPersistedEventsAtTimeOfLatestSnapshot)
+        [InlineData(false, false, false, false, 0)]
+        [InlineData(true, false, false, false, 0)]
+        [InlineData(true, true, false, false, 0)]
+        [InlineData(true, true, true, false, 4)]
+        [InlineData(true, true, true, true, 5)]
+        [InlineData(true, true, false, true, 5)]
+        public async Task GetStatisticsNumberOfPersistedEventsAtTimeOfLatestSnapshotWithoutRestarting(bool includesCompetingSequences, bool includesEvents, bool includesSnapshots, bool endsWithSnapshot, int numberOfPersistedEventsAtTimeOfLatestSnapshot)
         {
             using (var eventStore = CreateInstance())
             {
@@ -151,7 +159,13 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                 if (includesSnapshots) steps.Add(new Step(true, CreateTestData()));
                 if (includesEvents) steps.Add(new Step(false, CreateTestData()));
                 if (endsWithSnapshot) steps.Add(new Step(true, CreateTestData()));
-                await InsertInterleaved(eventStore, CompetingSequenceWithSameEntityTypeName, CompetingSequenceWithSameEntityId, new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, steps.ToImmutableArray()));
+                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, steps.ToImmutableArray()) };
+                if (includesCompetingSequences)
+                {
+                    sequences.Add(CompetingSequenceWithSameEntityTypeName);
+                    sequences.Add(CompetingSequenceWithSameEntityId);
+                }
+                await InsertInterleaved(eventStore, sequences.ToImmutableArray());
 
                 var statistics = await eventStore.GetStatistics(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId);
 
@@ -160,12 +174,13 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
         }
 
         [Theory, Trait("Type", "Integration")]
-        [InlineData(false, false, false)]
-        [InlineData(true, false, false)]
-        [InlineData(true, true, false)]
-        [InlineData(true, true, true)]
-        [InlineData(true, false, true)]
-        public async Task GetEventWithoutRestarting(bool includesEvents, bool includesSnapshots, bool endsWithSnapshot)
+        [InlineData(false, false, false, false)]
+        [InlineData(true, false, false, false)]
+        [InlineData(true, true, false, false)]
+        [InlineData(true, true, true, false)]
+        [InlineData(true, true, true, true)]
+        [InlineData(true, true, false, true)]
+        public async Task GetEventWithoutRestarting(bool includesCompetingSequences, bool includesEvents, bool includesSnapshots, bool endsWithSnapshot)
         {
             using (var eventStore = CreateInstance())
             {
@@ -182,7 +197,13 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                     .Where(step => !step.IsSnapshot)
                     .Select(step => step.Data)
                     .ToList();
-                await InsertInterleaved(eventStore, CompetingSequenceWithSameEntityTypeName, CompetingSequenceWithSameEntityId, new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, steps.ToImmutableArray()));
+                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, steps.ToImmutableArray()) };
+                if (includesCompetingSequences)
+                {
+                    sequences.Add(CompetingSequenceWithSameEntityTypeName);
+                    sequences.Add(CompetingSequenceWithSameEntityId);
+                }
+                await InsertInterleaved(eventStore, sequences.ToImmutableArray());
                 var actual = new List<ImmutableArray<byte>>();
 
                 while (actual.Count < expected.Count()) actual.Add(await eventStore.GetEvent(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, actual.Count));
@@ -192,12 +213,13 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
         }
 
         [Theory, Trait("Type", "Integration")]
-        [InlineData(false, false, false)]
-        [InlineData(true, false, false)]
-        [InlineData(true, true, false)]
-        [InlineData(true, true, true)]
-        [InlineData(true, false, true)]
-        public async Task GetSnapshotWithoutRestarting(bool includesEvents, bool includesSnapshots, bool endsWithSnapshot)
+        [InlineData(false, false, false, false)]
+        [InlineData(true, false, false, false)]
+        [InlineData(true, true, false, false)]
+        [InlineData(true, true, true, false)]
+        [InlineData(true, true, true, true)]
+        [InlineData(true, true, false, true)]
+        public async Task GetSnapshotWithoutRestarting(bool includesCompetingSequences, bool includesEvents, bool includesSnapshots, bool endsWithSnapshot)
         {
             using (var eventStore = CreateInstance())
             {
@@ -214,7 +236,13 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                     .Where(step => step.IsSnapshot)
                     .Select(step => step.Data)
                     .ToList();
-                await InsertInterleaved(eventStore, CompetingSequenceWithSameEntityTypeName, CompetingSequenceWithSameEntityId, new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, steps.ToImmutableArray()));
+                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, steps.ToImmutableArray()) };
+                if (includesCompetingSequences)
+                {
+                    sequences.Add(CompetingSequenceWithSameEntityTypeName);
+                    sequences.Add(CompetingSequenceWithSameEntityId);
+                }
+                await InsertInterleaved(eventStore, sequences.ToImmutableArray());
                 var actual = new List<ImmutableArray<byte>>();
 
                 while (actual.Count < expected.Count()) actual.Add(await eventStore.GetSnapshot(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, steps.TakeWhile(step => step.Data != expected[actual.Count]).Count(step => !step.IsSnapshot)));
