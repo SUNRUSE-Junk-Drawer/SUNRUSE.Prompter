@@ -19,6 +19,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SUNRUSE.Prompter.Persistenc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SUNRUSE.Prompter.Persistence.Files.Tests", "SUNRUSE.Prompter.Persistence.Files.Tests\SUNRUSE.Prompter.Persistence.Files.Tests.csproj", "{1C365800-6E99-4C73-996B-3B85386F92D2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SUNRUSE.Prompter.Persistence.Memory", "SUNRUSE.Prompter.Persistence.Memory\SUNRUSE.Prompter.Persistence.Memory.csproj", "{FF079EFD-64BC-4724-9E52-9654E66152B0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SUNRUSE.Prompter.Persistence.Memory.Tests", "SUNRUSE.Prompter.Persistence.Memory.Tests\SUNRUSE.Prompter.Persistence.Memory.Tests.csproj", "{718EE487-0791-4155-94E2-F04333B74CB6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +53,14 @@ Global
 		{1C365800-6E99-4C73-996B-3B85386F92D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C365800-6E99-4C73-996B-3B85386F92D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C365800-6E99-4C73-996B-3B85386F92D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF079EFD-64BC-4724-9E52-9654E66152B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF079EFD-64BC-4724-9E52-9654E66152B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF079EFD-64BC-4724-9E52-9654E66152B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF079EFD-64BC-4724-9E52-9654E66152B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{718EE487-0791-4155-94E2-F04333B74CB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{718EE487-0791-4155-94E2-F04333B74CB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{718EE487-0791-4155-94E2-F04333B74CB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{718EE487-0791-4155-94E2-F04333B74CB6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +72,8 @@ Global
 		{F0F13700-88FD-4EA9-BC80-2F8E2E163D55} = {CE97A667-5BDC-4435-B384-24648170DBD8}
 		{50A2FAFB-21C9-4367-B4D2-599EAD1727D5} = {CE97A667-5BDC-4435-B384-24648170DBD8}
 		{1C365800-6E99-4C73-996B-3B85386F92D2} = {CE97A667-5BDC-4435-B384-24648170DBD8}
+		{FF079EFD-64BC-4724-9E52-9654E66152B0} = {CE97A667-5BDC-4435-B384-24648170DBD8}
+		{718EE487-0791-4155-94E2-F04333B74CB6} = {CE97A667-5BDC-4435-B384-24648170DBD8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {750A48DA-7437-4443-BDF0-C9AA2FB0A49C}
