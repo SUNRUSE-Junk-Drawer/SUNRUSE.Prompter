@@ -1,4 +1,7 @@
-﻿using Microsoft.Data.Sqlite;
+﻿// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+
+using Microsoft.Data.Sqlite;
 using SUNRUSE.Prompter.Persistence.Abstractions;
 using System;
 using System.Collections.Immutable;

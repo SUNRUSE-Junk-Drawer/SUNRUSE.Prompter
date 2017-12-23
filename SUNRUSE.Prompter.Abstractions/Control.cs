@@ -1,4 +1,7 @@
-﻿namespace SUNRUSE.Prompter.Abstractions
+﻿// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+
+namespace SUNRUSE.Prompter.Abstractions
 {
     /// <summary>A <see cref="Control"/> shown on a <see cref="Prompt"/>.</summary>
     public sealed class Control
