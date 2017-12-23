@@ -51,18 +51,18 @@ namespace SUNRUSE.Prompter.Persistence.Sqlite
                                 CREATE TABLE IF NOT EXISTS prompter_v1_event (
                                     entity_type_name TEXT NOT NULL,
                                     entity_id BLOB NOT NULL,
-                                    number_of_events_at_time_of_creation INTEGER NOT NULL,
+                                    event_id INTEGER NOT NULL,
                                     data BLOB NOT NULL
                                 );
-                                CREATE UNIQUE INDEX IF NOT EXISTS prompter_v1_event_idx ON prompter_v1_event (entity_type_name, entity_id, number_of_events_at_time_of_creation);
+                                CREATE UNIQUE INDEX IF NOT EXISTS prompter_v1_event_idx ON prompter_v1_event (entity_type_name, entity_id, event_id);
 
                                 CREATE TABLE IF NOT EXISTS prompter_v1_snapshot (
                                     entity_type_name TEXT NOT NULL,
                                     entity_id BLOB NOT NULL,
-                                    number_of_events_at_time_of_creation INTEGER NOT NULL,
+                                    snapshot_id INTEGER NOT NULL,
                                     data BLOB NOT NULL
                                 );
-                                CREATE UNIQUE INDEX IF NOT EXISTS prompter_v1_snapshot_idx ON prompter_v1_snapshot (entity_type_name, entity_id, number_of_events_at_time_of_creation)
+                                CREATE UNIQUE INDEX IF NOT EXISTS prompter_v1_snapshot_idx ON prompter_v1_snapshot (entity_type_name, entity_id, snapshot_id)
                             ";
                             await command.ExecuteNonQueryAsync();
                         }
@@ -111,17 +111,17 @@ namespace SUNRUSE.Prompter.Persistence.Sqlite
                     WHERE 
                         entity_type_name = @entity_type_name
                         AND entity_id = @entity_id
-                        AND number_of_events_at_time_of_creation = @number_of_events_at_time_of_creation
+                        AND event_id = @event_id
                 ";
                 command.Parameters.AddWithValue("entity_type_name", entityTypeName);
                 command.Parameters.AddWithValue("entity_id", entityId);
-                command.Parameters.AddWithValue("number_of_events_at_time_of_creation", eventId);
+                command.Parameters.AddWithValue("event_id", eventId);
                 return (((byte[])await command.ExecuteScalarAsync()).ToImmutableArray());
             }
         }
 
         /// <inheritdoc />
-        public async Task<ImmutableArray<byte>> GetSnapshot(string entityTypeName, Guid entityId, int atEventId)
+        public async Task<ImmutableArray<byte>> GetSnapshot(string entityTypeName, Guid entityId, int snapshotId)
         {
             await CheckInitialized();
             using (var command = Connection.CreateCommand())
@@ -134,11 +134,11 @@ namespace SUNRUSE.Prompter.Persistence.Sqlite
                     WHERE 
                         entity_type_name = @entity_type_name
                         AND entity_id = @entity_id
-                        AND number_of_events_at_time_of_creation = @number_of_events_at_time_of_creation
+                        AND snapshot_id = @snapshot_id
                 ";
                 command.Parameters.AddWithValue("entity_type_name", entityTypeName);
                 command.Parameters.AddWithValue("entity_id", entityId);
-                command.Parameters.AddWithValue("number_of_events_at_time_of_creation", atEventId);
+                command.Parameters.AddWithValue("snapshot_id", snapshotId);
                 return (((byte[])await command.ExecuteScalarAsync()).ToImmutableArray());
             }
         }
@@ -152,30 +152,30 @@ namespace SUNRUSE.Prompter.Persistence.Sqlite
                 command.CommandText = @"
                     SELECT (
                         SELECT 
-                            MAX(number_of_events_at_time_of_creation)
+                            MAX(event_id)
                         FROM 
                             prompter_v1_event 
                         WHERE
                             entity_type_name = @entity_type_name
                             AND entity_id = @entity_id
-                    ) number_of_events, (
+                    ) greatest_event_id, (
                         SELECT 
-                            MAX(number_of_events_at_time_of_creation)
+                            MAX(snapshot_id)
                         FROM 
                             prompter_v1_snapshot
                         WHERE
                             entity_type_name = @entity_type_name
                             AND entity_id = @entity_id
-                    ) number_of_events_at_time_of_latest_snapshot_creation
+                    ) greatest_snapshot_id
                 ";
                 command.Parameters.AddWithValue("entity_type_name", entityTypeName);
                 command.Parameters.AddWithValue("entity_id", entityId);
                 using (var reader = await command.ExecuteReaderAsync())
                 {
                     reader.Read();
-                    var numberOfEvents = reader["number_of_events"];
-                    var numberOfEventsAtTimeOfLatestSnapshotCreation = reader["number_of_events_at_time_of_latest_snapshot_creation"];
-                    return new EventStoreStatistics(numberOfEvents == DBNull.Value ? null : (int?)(long)numberOfEvents, numberOfEventsAtTimeOfLatestSnapshotCreation == DBNull.Value ? null : (int?)(long)numberOfEventsAtTimeOfLatestSnapshotCreation);
+                    var greatestEventId = reader["greatest_event_id"];
+                    var greatestSnapshotId = reader["greatest_snapshot_id"];
+                    return new EventStoreStatistics(greatestEventId == DBNull.Value ? null : (int?)(long)greatestEventId, greatestSnapshotId == DBNull.Value ? null : (int?)(long)greatestSnapshotId);
                 }
             }
         }
@@ -190,7 +190,7 @@ namespace SUNRUSE.Prompter.Persistence.Sqlite
                     INSERT INTO prompter_v1_event (
                         entity_type_name, 
                         entity_id, 
-                        number_of_events_at_time_of_creation, 
+                        event_id, 
                         data
                     ) VALUES (
                         @entity_type_name, 
@@ -217,7 +217,7 @@ namespace SUNRUSE.Prompter.Persistence.Sqlite
                     INSERT INTO prompter_v1_snapshot (
                         entity_type_name, 
                         entity_id, 
-                        number_of_events_at_time_of_creation, 
+                        snapshot_id, 
                         data
                     ) VALUES (
                         @entity_type_name, 
