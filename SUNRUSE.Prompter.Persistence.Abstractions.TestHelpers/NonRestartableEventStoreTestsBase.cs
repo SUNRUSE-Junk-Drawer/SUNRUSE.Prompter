@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
+namespace SUNRUSE.Prompter.Persistence.Abstractions.TestHelpers
 {
     public abstract class NonRestartableEventStoreTestsBase
     {

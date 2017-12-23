@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SUNRUSE.Prompter.Persistence.Abstractions.Tests\SUNRUSE.Prompter.Persistence.Abstractions.Tests.csproj" />
+    <ProjectReference Include="..\SUNRUSE.Prompter.Persistence.Abstractions.TestHelpers\SUNRUSE.Prompter.Persistence.Abstractions.TestHelpers.csproj" />
     <ProjectReference Include="..\SUNRUSE.Prompter.Persistence.Abstractions\SUNRUSE.Prompter.Persistence.Abstractions.csproj" />
     <ProjectReference Include="..\SUNRUSE.Prompter.Persistence.Memory\SUNRUSE.Prompter.Persistence.Memory.csproj" />
   </ItemGroup>

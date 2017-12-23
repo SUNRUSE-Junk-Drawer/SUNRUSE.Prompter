@@ -1,5 +1,5 @@
 using SUNRUSE.Prompter.Persistence.Abstractions;
-using SUNRUSE.Prompter.Persistence.Abstractions.Tests;
+using SUNRUSE.Prompter.Persistence.Abstractions.TestHelpers;
 
 namespace SUNRUSE.Prompter.Persistence.Memory.Tests
 {
