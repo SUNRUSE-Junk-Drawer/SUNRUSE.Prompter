@@ -179,7 +179,7 @@ namespace SUNRUSE.Prompter.Persistence.Sqlite
         }
 
         /// <inheritdoc />
-        public async Task PersistEvent(string entityTypeName, Guid entityId, ImmutableArray<byte> data)
+        public async Task PersistEvent(string entityTypeName, Guid entityId, int eventId, ImmutableArray<byte> data)
         {
             await CheckInitialized();
             using (var command = Connection.CreateCommand())
@@ -190,27 +190,23 @@ namespace SUNRUSE.Prompter.Persistence.Sqlite
                         entity_id, 
                         number_of_events_at_time_of_creation, 
                         data
-                    ) 
-                    SELECT 
+                    ) VALUES (
                         @entity_type_name, 
                         @entity_id, 
-                        COUNT(1),
+                        @event_id,
                         @data
-                    FROM
-                        prompter_v1_event
-                    WHERE
-                        entity_type_name = @entity_type_name
-                        AND entity_id = @entity_id
+                    )
                 ";
                 command.Parameters.AddWithValue("entity_type_name", entityTypeName);
                 command.Parameters.AddWithValue("entity_id", entityId);
+                command.Parameters.AddWithValue("event_id", eventId);
                 command.Parameters.AddWithValue("data", data.ToArray());
                 await command.ExecuteNonQueryAsync();
             }
         }
 
         /// <inheritdoc />
-        public async Task PersistSnapshot(string entityTypeName, Guid entityId, ImmutableArray<byte> data)
+        public async Task PersistSnapshot(string entityTypeName, Guid entityId, int snapshotId, ImmutableArray<byte> data)
         {
             await CheckInitialized();
             using (var command = Connection.CreateCommand())
@@ -221,20 +217,16 @@ namespace SUNRUSE.Prompter.Persistence.Sqlite
                         entity_id, 
                         number_of_events_at_time_of_creation, 
                         data
-                    ) 
-                    SELECT 
+                    ) VALUES (
                         @entity_type_name, 
                         @entity_id, 
-                        COUNT(1),
+                        @snapshot_id,
                         @data
-                    FROM
-                        prompter_v1_event
-                    WHERE
-                        entity_type_name = @entity_type_name
-                        AND entity_id = @entity_id
+                    )
                 ";
                 command.Parameters.AddWithValue("entity_type_name", entityTypeName);
                 command.Parameters.AddWithValue("entity_id", entityId);
+                command.Parameters.AddWithValue("snapshot_id", snapshotId);
                 command.Parameters.AddWithValue("data", data.ToArray());
                 await command.ExecuteNonQueryAsync();
             }

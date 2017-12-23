@@ -27,14 +27,16 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions
         /// <summary>Persists <see cref="byte"/>s representing an event.</summary>
         /// <param name="entityTypeName">The name of the entity type being persisted.  This can be considered a "namespace", "collection" or "table" of <paramref name="entityId"/>s.</param>
         /// <param name="entityId">The <see cref="Guid"/> of the entity instance being persisted.</param>
+        /// <param name="eventId">The ID of the event to persist.</param>
         /// <param name="data">The <see cref="byte"/>s to persist.</param>
-        Task PersistEvent(string entityTypeName, Guid entityId, ImmutableArray<byte> data);
+        Task PersistEvent(string entityTypeName, Guid entityId, int eventId, ImmutableArray<byte> data);
 
         /// <summary>Persists <see cref="byte"/> representing the result of applying every event previously persisted against an entity.</summary>
         /// <param name="entityTypeName">The name of the entity type being persisted.  This can be considered a "namespace", "collection" or "table" of <paramref name="entityId"/>s.</param>
         /// <param name="entityId">The <see cref="Guid"/> of the entity instance being persisted.</param>
+        /// <param name="snapshotId">The ID of the snapshot to persist.</param>
         /// <param name="data">The <see cref="byte"/>s to persist.</param>
-        Task PersistSnapshot(string entityTypeName, Guid entityId, ImmutableArray<byte> data);
+        Task PersistSnapshot(string entityTypeName, Guid entityId, int snapshotId, ImmutableArray<byte> data);
 
         /// <summary>Gets the <see cref="EventStoreStatistics"/> for a specified entity.</summary>
         /// <param name="entityTypeName">The name of the entity type being persisted.  This can be considered a "namespace", "collection" or "table" of <paramref name="entityId"/>s.</param>
@@ -52,8 +54,8 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions
         /// <summary>Gets a specific snapshot previously persisted against an entity.</summary>
         /// <param name="entityTypeName">The name of the entity type being persisted.  This can be considered a "namespace", "collection" or "table" of <paramref name="entityId"/>s.</param>
         /// <param name="entityId">The <see cref="Guid"/> of the entity instance being queried.</param>
-        /// <param name="atEventId">The event ID of the snapshot to get.</param>
+        /// <param name="snapshotId">The ID of the snapshot to get.</param>
         /// <returns>The <see cref="byte"/>s representing the requested snapshot.</returns>
-        Task<ImmutableArray<byte>> GetSnapshot(string entityTypeName, Guid entityId, int atEventId);
+        Task<ImmutableArray<byte>> GetSnapshot(string entityTypeName, Guid entityId, int snapshotId);
     }
 }

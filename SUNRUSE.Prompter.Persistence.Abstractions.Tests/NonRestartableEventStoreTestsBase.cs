@@ -32,11 +32,14 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
 
             public readonly ImmutableArray<Step> Steps;
 
-            public Sequence(string entityTypeName, Guid entityId, ImmutableArray<Step> steps)
+            public readonly int StartingEventId;
+
+            public Sequence(string entityTypeName, Guid entityId, ImmutableArray<Step> steps, int startingEventId)
             {
                 EntityTypeName = entityTypeName;
                 EntityId = entityId;
                 Steps = steps;
+                StartingEventId = startingEventId;
             }
         }
 
@@ -61,17 +64,16 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                     var runFromSteps = (i * sequence.Steps.Length) / maxSteps;
                     var runToSteps = ((i + 1) * sequence.Steps.Length) / maxSteps;
 
-                    foreach (var step in sequence.Steps
-                        .Skip(runFromSteps)
-                        .Take(runToSteps - runFromSteps))
+                    for (var j = runFromSteps; j < runToSteps; j++)
                     {
+                        var step = sequence.Steps[j];
                         if (step.IsSnapshot)
                         {
-                            await eventStore.PersistSnapshot(sequence.EntityTypeName, sequence.EntityId, step.Data);
+                            await eventStore.PersistSnapshot(sequence.EntityTypeName, sequence.EntityId, sequence.StartingEventId + sequence.Steps.Take(j).Count(found => !found.IsSnapshot), step.Data);
                         }
                         else
                         {
-                            await eventStore.PersistEvent(sequence.EntityTypeName, sequence.EntityId, step.Data);
+                            await eventStore.PersistEvent(sequence.EntityTypeName, sequence.EntityId, sequence.StartingEventId + sequence.Steps.Take(j).Count(found => !found.IsSnapshot), step.Data);
                         }
                     }
                 }
@@ -89,7 +91,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
             new Step(false, CreateTestData()),
             new Step(false, CreateTestData()),
             new Step(false, CreateTestData())
-        ));
+        ), 0);
 
         protected readonly Sequence CompetingSequenceWithSameEntityId = new Sequence("Test Other Entity Type Name", Guid.NewGuid(), ImmutableArray.Create
         (
@@ -103,7 +105,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
             new Step(true, CreateTestData()),
             new Step(false, CreateTestData()),
             new Step(true, CreateTestData())
-        ));
+        ), 0);
 
         [Theory, Trait("Type", "Integration")]
         [InlineData(false, false, false, false, 0)]
@@ -125,7 +127,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                 if (includesSnapshots) steps.Add(new Step(true, CreateTestData()));
                 if (includesEvents) steps.Add(new Step(false, CreateTestData()));
                 if (endsWithSnapshot) steps.Add(new Step(true, CreateTestData()));
-                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, steps.ToImmutableArray()) };
+                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, steps.ToImmutableArray(), 0) };
                 if (includesCompetingSequences)
                 {
                     sequences.Add(CompetingSequenceWithSameEntityTypeName);
@@ -159,7 +161,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                 if (includesSnapshots) steps.Add(new Step(true, CreateTestData()));
                 if (includesEvents) steps.Add(new Step(false, CreateTestData()));
                 if (endsWithSnapshot) steps.Add(new Step(true, CreateTestData()));
-                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, steps.ToImmutableArray()) };
+                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, steps.ToImmutableArray(), 0) };
                 if (includesCompetingSequences)
                 {
                     sequences.Add(CompetingSequenceWithSameEntityTypeName);
@@ -197,7 +199,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                     .Where(step => !step.IsSnapshot)
                     .Select(step => step.Data)
                     .ToList();
-                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, steps.ToImmutableArray()) };
+                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, steps.ToImmutableArray(), 0) };
                 if (includesCompetingSequences)
                 {
                     sequences.Add(CompetingSequenceWithSameEntityTypeName);
@@ -236,7 +238,7 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                     .Where(step => step.IsSnapshot)
                     .Select(step => step.Data)
                     .ToList();
-                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, steps.ToImmutableArray()) };
+                var sequences = new List<Sequence> { new Sequence(CompetingSequenceWithSameEntityTypeName.EntityTypeName, CompetingSequenceWithSameEntityId.EntityId, steps.ToImmutableArray(), 0) };
                 if (includesCompetingSequences)
                 {
                     sequences.Add(CompetingSequenceWithSameEntityTypeName);
@@ -302,11 +304,11 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions.Tests
                     {
                         if (step.Snapshot)
                         {
-                            await eventStore.PersistSnapshot(sequenceTemplate.EntityTypeName, sequenceTemplate.EntityId, step.Data);
+                            await eventStore.PersistSnapshot(sequenceTemplate.EntityTypeName, sequenceTemplate.EntityId, step.EventId, step.Data);
                         }
                         else
                         {
-                            await eventStore.PersistEvent(sequenceTemplate.EntityTypeName, sequenceTemplate.EntityId, step.Data);
+                            await eventStore.PersistEvent(sequenceTemplate.EntityTypeName, sequenceTemplate.EntityId, step.EventId, step.Data);
                         }
                     }
                     var eventIds = await eventStore.GetStatistics(sequenceTemplate.EntityTypeName, sequenceTemplate.EntityId);

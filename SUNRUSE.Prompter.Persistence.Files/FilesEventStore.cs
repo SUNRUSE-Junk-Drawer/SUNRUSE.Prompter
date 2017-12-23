@@ -80,51 +80,27 @@ namespace SUNRUSE.Prompter.Persistence.Files
         }
 
         /// <inheritdoc />
-        public Task<ImmutableArray<byte>> GetSnapshot(string entityTypeName, Guid entityId, int atEventId)
+        public Task<ImmutableArray<byte>> GetSnapshot(string entityTypeName, Guid entityId, int snapshotId)
         {
-            return Task.FromResult(File.ReadAllBytes(GetSnapshotPath(entityTypeName, entityId, atEventId)).ToImmutableArray());
+            return Task.FromResult(File.ReadAllBytes(GetSnapshotPath(entityTypeName, entityId, snapshotId)).ToImmutableArray());
         }
 
         /// <inheritdoc />
-        public Task PersistEvent(string entityTypeName, Guid entityId, ImmutableArray<byte> data)
+        public Task PersistEvent(string entityTypeName, Guid entityId, int eventId, ImmutableArray<byte> data)
         {
-            var latestEvent = 0;
-
             var eventsPath = GetEventsPath(entityTypeName, entityId);
-            if (Directory.Exists(eventsPath))
-            {
-                latestEvent = Directory
-                    .EnumerateFiles(eventsPath)
-                    .Select(filename => int.Parse(Path.GetFileName(filename)))
-                    .DefaultIfEmpty(0)
-                    .Max() + 1;
-            }
-            else
-            {
-                Directory.CreateDirectory(eventsPath);
-            }
+            Directory.CreateDirectory(eventsPath);
 
-            File.WriteAllBytes(GetEventPath(entityTypeName, entityId, latestEvent), data.ToArray());
+            File.WriteAllBytes(GetEventPath(entityTypeName, entityId, eventId), data.ToArray());
             return Task.CompletedTask;
         }
 
         /// <inheritdoc />
-        public Task PersistSnapshot(string entityTypeName, Guid entityId, ImmutableArray<byte> data)
+        public Task PersistSnapshot(string entityTypeName, Guid entityId, int snapshotId, ImmutableArray<byte> data)
         {
-            var latestEvent = 0;
-
-            var eventsPath = GetEventsPath(entityTypeName, entityId);
-            if (Directory.Exists(eventsPath))
-            {
-                latestEvent = Directory
-                    .EnumerateFiles(eventsPath)
-                    .Select(filename => int.Parse(Path.GetFileName(filename)))
-                    .Max() + 1;
-            }
-
             var snapshotsPath = GetSnapshotsPath(entityTypeName, entityId);
-            if (!Directory.Exists(snapshotsPath)) Directory.CreateDirectory(snapshotsPath);
-            File.WriteAllBytes(GetSnapshotPath(entityTypeName, entityId, latestEvent), data.ToArray());
+            Directory.CreateDirectory(snapshotsPath);
+            File.WriteAllBytes(GetSnapshotPath(entityTypeName, entityId, snapshotId), data.ToArray());
             return Task.CompletedTask;
         }
 
