@@ -5,13 +5,20 @@ using System.Threading.Tasks;
 namespace SUNRUSE.Prompter.Persistence.Abstractions
 {
     /// <summary>Describes the event IDs of a specific entity.</summary>
-    public struct EventIds
+    public struct EventStoreStatistics
     {
         /// <summary>The number of persisted events.</summary>
-        public readonly int LatestEvent;
+        public readonly int NumberOfPersistedEvents;
 
-        /// <summary>The number of events persisted as of the latest snapshot, or zero if no snapshots have been taken.</summary>
-        public readonly int LatestSnapshot;
+        /// <summary>The number of events persisted as of the latest snapshot.</summary>
+        public readonly int NumberOfPersistedEventsAtTimeOfLatestSnapshot;
+
+        /// <inheritdoc />
+        public EventStoreStatistics(int numberOfPersistedEvents, int numberOfPersistedEventsAtTimeOfLatestSnapshot)
+        {
+            NumberOfPersistedEvents = numberOfPersistedEvents;
+            NumberOfPersistedEventsAtTimeOfLatestSnapshot = numberOfPersistedEventsAtTimeOfLatestSnapshot;
+        }
     }
 
     /// <summary>Implemented by persistence stores.</summary>
@@ -29,11 +36,11 @@ namespace SUNRUSE.Prompter.Persistence.Abstractions
         /// <param name="data">The <see cref="byte"/>s to persist.</param>
         Task PersistSnapshot(string entityTypeName, Guid entityId, ImmutableArray<byte> data);
 
-        /// <summary>Gets the <see cref="EventIds"/> for a specified entity.</summary>
+        /// <summary>Gets the <see cref="EventStoreStatistics"/> for a specified entity.</summary>
         /// <param name="entityTypeName">The name of the entity type being persisted.  This can be considered a "namespace", "collection" or "table" of <paramref name="entityId"/>s.</param>
         /// <param name="entityId">The <see cref="Guid"/> of the entity instance being queried.</param>
-        /// <returns>A new <see cref="EventIds"/> for <paramref name="entityTypeName"/>/<paramref name="entityId"/>.</returns>
-        Task<EventIds> GetEventIds(string entityTypeName, Guid entityId);
+        /// <returns>A new <see cref="EventStoreStatistics"/> for <paramref name="entityTypeName"/>/<paramref name="entityId"/>.</returns>
+        Task<EventStoreStatistics> GetStatistics(string entityTypeName, Guid entityId);
 
         /// <summary>Gets a specific event previously persisted against an entity.</summary>
         /// <param name="entityTypeName">The name of the entity type being persisted.  This can be considered a "namespace", "collection" or "table" of <paramref name="entityId"/>s.</param>
