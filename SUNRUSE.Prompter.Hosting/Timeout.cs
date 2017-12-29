@@ -7,7 +7,14 @@ using System.Threading.Tasks;
 namespace SUNRUSE.Prompter.Hosting
 {
     /// <summary><see cref="IDisposable.Dispose"/>s of an <see cref="IDisposable"/> after a timeout, with the option to <see cref="Reset"/> that timeout or <see cref="IDisposable.Dispose"/> immediately.</summary>
-    public sealed class Timeout : IDisposable
+    public interface ITimeout : IDisposable
+    {
+        /// <summary>Delays the <see cref="IDisposable.Dispose"/> of the <see cref="IDisposable"/> by the set <see cref="TimeSpan"/>, as though reset.</summary>
+        void Reset();
+    }
+
+    /// <inheritdoc />
+    public sealed class Timeout : ITimeout
     {
         /// <summary>The <see cref="TimeSpan"/> after which to <see cref="IDisposable.Dispose"/> of <see cref="ToDispose"/> if not <see cref="Reset"/>.</summary>
         public readonly TimeSpan Duration;
@@ -28,7 +35,7 @@ namespace SUNRUSE.Prompter.Hosting
             Reset();
         }
 
-        /// <summary>Delays the <see cref="IDisposable.Dispose"/> of <see cref="ToDispose"/> by the set <see cref="Duration"/>, as though reset.</summary>
+        /// <inheritdoc />
         public void Reset()
         {
             if (Disposed) return;
