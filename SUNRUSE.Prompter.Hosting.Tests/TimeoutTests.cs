@@ -745,8 +745,8 @@ namespace SUNRUSE.Prompter.Hosting.Tests
                         switch (action)
                         {
                             case TestAction.Reset: timeout.Reset(); break;
-                            case TestAction.UnderIntervalDelay: await Task.Delay(100); break;
-                            case TestAction.OverIntervalDelay: await Task.Delay(700); break;
+                            case TestAction.UnderIntervalDelay: await Task.Delay(250); break;
+                            case TestAction.OverIntervalDelay: await Task.Delay(550); break;
                             case TestAction.Dispose: timeout.Dispose(); break;
                             default: throw new NotImplementedException();
                         }
