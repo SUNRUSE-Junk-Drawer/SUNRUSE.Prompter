@@ -3,6 +3,9 @@
 
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using Xunit;
 
 namespace SUNRUSE.Prompter.Abstractions.Tests
@@ -39,38 +42,6 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
             var roundTripped = JsonConvert.DeserializeObject<Control>(JsonConvert.SerializeObject(control));
 
             Assert.Equal(expected, roundTripped.ButtonId);
-        }
-
-        [Fact, Trait("Type", "Unit")]
-        public void LeftIconDefaultsToNull()
-        {
-            var control = new Control();
-
-            Assert.Null(control.LeftIcon);
-        }
-
-        [Theory, Trait("Type", "Unit")]
-        [InlineData(null)]
-        [InlineData("Test Non-Null Value")]
-        public void LeftIconCanBeSetTo(string expected)
-        {
-            var control = new Control(leftIcon: expected);
-
-            var actual = control.LeftIcon;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory, Trait("Type", "Unit")]
-        [InlineData(null)]
-        [InlineData("Test Non-Null Value")]
-        public void LeftIconRoundTripsSerializationWhen(string expected)
-        {
-            var control = new Control(leftIcon: expected);
-
-            var roundTripped = JsonConvert.DeserializeObject<Control>(JsonConvert.SerializeObject(control));
-
-            Assert.Equal(expected, roundTripped.LeftIcon);
         }
 
         [Fact, Trait("Type", "Unit")]
@@ -170,99 +141,31 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
         }
 
         [Fact, Trait("Type", "Unit")]
-        public void RightIconDefaultsToNull()
+        public void StylingFlagsDefaultsToEmpty()
         {
             var control = new Control();
 
-            Assert.Null(control.RightIcon);
-        }
-
-        [Theory, Trait("Type", "Unit")]
-        [InlineData(null)]
-        [InlineData("Test Non-Null Value")]
-        public void RightIconCanBeSetTo(string expected)
-        {
-            var control = new Control(rightIcon: expected);
-
-            var actual = control.RightIcon;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory, Trait("Type", "Unit")]
-        [InlineData(null)]
-        [InlineData("Test Non-Null Value")]
-        public void RightIconRoundTripsSerializationWhen(string expected)
-        {
-            var control = new Control(rightIcon: expected);
-
-            var roundTripped = JsonConvert.DeserializeObject<Control>(JsonConvert.SerializeObject(control));
-
-            Assert.Equal(expected, roundTripped.RightIcon);
+            Assert.Empty(control.StylingFlags);
         }
 
         [Fact, Trait("Type", "Unit")]
-        public void IsFirstInGroupDefaultsToFalse()
+        public void StylingFlagsCanBeSet()
         {
-            var control = new Control();
+            var control = new Control(stylingFlags: ImmutableHashSet.Create("Test Styling Flag A", "Test Styling Flag B", "Test Styling Flag C"));
 
-            Assert.False(control.IsFirstInGroup);
-        }
+            var actual = control.StylingFlags;
 
-        [Theory, Trait("Type", "Unit")]
-        [InlineData(false)]
-        [InlineData(true)]
-        public void IsFirstInGroupCanBeSetTo(bool expected)
-        {
-            var control = new Control(isFirstInGroup: expected);
-
-            var actual = control.IsFirstInGroup;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory, Trait("Type", "Unit")]
-        [InlineData(false)]
-        [InlineData(true)]
-        public void IsFirstInGroupRoundTripsSerializationWhen(bool expected)
-        {
-            var control = new Control(isFirstInGroup: expected);
-
-            var roundTripped = JsonConvert.DeserializeObject<Control>(JsonConvert.SerializeObject(control));
-
-            Assert.Equal(expected, roundTripped.IsFirstInGroup);
+            Assert.Equal(new[] { "Test Styling Flag A", "Test Styling Flag B", "Test Styling Flag C" }, actual.OrderBy(i => i));
         }
 
         [Fact, Trait("Type", "Unit")]
-        public void IsLastInGroupDefaultsToFalse()
+        public void StylingFlagsRoundTripsSerialization()
         {
-            var control = new Control();
-
-            Assert.False(control.IsLastInGroup);
-        }
-
-        [Theory, Trait("Type", "Unit")]
-        [InlineData(false)]
-        [InlineData(true)]
-        public void IsLastInGroupCanBeSetTo(bool expected)
-        {
-            var control = new Control(isLastInGroup: expected);
-
-            var actual = control.IsLastInGroup;
-
-            Assert.Equal(expected, actual);
-        }
-
-        [Theory, Trait("Type", "Unit")]
-        [InlineData(false)]
-        [InlineData(true)]
-        public void IsLastInGroupRoundTripsSerializationWhen(bool expected)
-        {
-            var control = new Control(isLastInGroup: expected);
+            var control = new Control(stylingFlags: ImmutableHashSet.Create("Test Styling Flag A", "Test Styling Flag B", "Test Styling Flag C"));
 
             var roundTripped = JsonConvert.DeserializeObject<Control>(JsonConvert.SerializeObject(control));
 
-            Assert.Equal(expected, roundTripped.IsLastInGroup);
+            Assert.Equal(new[] { "Test Styling Flag A", "Test Styling Flag B", "Test Styling Flag C" }, roundTripped.StylingFlags.OrderBy(i => i));
         }
     }
 }

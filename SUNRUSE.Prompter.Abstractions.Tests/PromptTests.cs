@@ -4,6 +4,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Immutable;
+using System.Linq;
 using Xunit;
 
 namespace SUNRUSE.Prompter.Abstractions.Tests
@@ -36,36 +37,27 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
         {
             var prompt = new Prompt(Guid.NewGuid(), ImmutableArray.Create
             (
-                new Control("Test ButtonId A", "Test LeftIcon A", "Test LeftText A", "Test MiddleText A", "Test RightText A", "Test RightIcon A", true, false),
-                new Control("Test ButtonId B", "Test LeftIcon B", "Test LeftText B", "Test MiddleText B", "Test RightText B", "Test RightIcon B", true, true),
-                new Control("Test ButtonId C", "Test LeftIcon C", "Test LeftText C", "Test MiddleText C", "Test RightText C", "Test RightIcon C", false, true)
+                new Control("Test ButtonId A", "Test LeftText A", "Test MiddleText A", "Test RightText A", ImmutableHashSet.Create("Test Styling Flag A A", "Test Styling Flag A B")),
+                new Control("Test ButtonId B", "Test LeftText B", "Test MiddleText B", "Test RightText B", ImmutableHashSet<string>.Empty),
+                new Control("Test ButtonId C", "Test LeftText C", "Test MiddleText C", "Test RightText C", ImmutableHashSet.Create("Test Styling Flag C A", "Test Styling Flag C B", "Test Styling Flag C C"))
             ));
 
             Assert.Equal(3, prompt.Controls.Length);
             Assert.Equal("Test ButtonId A", prompt.Controls[0].ButtonId);
-            Assert.Equal("Test LeftIcon A", prompt.Controls[0].LeftIcon);
             Assert.Equal("Test LeftText A", prompt.Controls[0].LeftText);
             Assert.Equal("Test MiddleText A", prompt.Controls[0].MiddleText);
             Assert.Equal("Test RightText A", prompt.Controls[0].RightText);
-            Assert.Equal("Test RightIcon A", prompt.Controls[0].RightIcon);
-            Assert.True(prompt.Controls[0].IsFirstInGroup);
-            Assert.False(prompt.Controls[0].IsLastInGroup);
+            Assert.Equal(new[] { "Test Styling Flag A A", "Test Styling Flag A B" }, prompt.Controls[0].StylingFlags.OrderBy(i => i));
             Assert.Equal("Test ButtonId B", prompt.Controls[1].ButtonId);
-            Assert.Equal("Test LeftIcon B", prompt.Controls[1].LeftIcon);
             Assert.Equal("Test LeftText B", prompt.Controls[1].LeftText);
             Assert.Equal("Test MiddleText B", prompt.Controls[1].MiddleText);
             Assert.Equal("Test RightText B", prompt.Controls[1].RightText);
-            Assert.Equal("Test RightIcon B", prompt.Controls[1].RightIcon);
-            Assert.True(prompt.Controls[1].IsFirstInGroup);
-            Assert.True(prompt.Controls[1].IsLastInGroup);
+            Assert.Empty(prompt.Controls[1].StylingFlags);
             Assert.Equal("Test ButtonId C", prompt.Controls[2].ButtonId);
-            Assert.Equal("Test LeftIcon C", prompt.Controls[2].LeftIcon);
             Assert.Equal("Test LeftText C", prompt.Controls[2].LeftText);
             Assert.Equal("Test MiddleText C", prompt.Controls[2].MiddleText);
             Assert.Equal("Test RightText C", prompt.Controls[2].RightText);
-            Assert.Equal("Test RightIcon C", prompt.Controls[2].RightIcon);
-            Assert.False(prompt.Controls[2].IsFirstInGroup);
-            Assert.True(prompt.Controls[2].IsLastInGroup);
+            Assert.Equal(new[] { "Test Styling Flag C A", "Test Styling Flag C B", "Test Styling Flag C C" }, prompt.Controls[2].StylingFlags.OrderBy(i => i));
         }
 
         [Fact, Trait("Type", "Unit")]
@@ -73,38 +65,29 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
         {
             var prompt = new Prompt(Guid.NewGuid(), ImmutableArray.Create
             (
-                new Control("Test ButtonId A", "Test LeftIcon A", "Test LeftText A", "Test MiddleText A", "Test RightText A", "Test RightIcon A", true, false),
-                new Control("Test ButtonId B", "Test LeftIcon B", "Test LeftText B", "Test MiddleText B", "Test RightText B", "Test RightIcon B", true, true),
-                new Control("Test ButtonId C", "Test LeftIcon C", "Test LeftText C", "Test MiddleText C", "Test RightText C", "Test RightIcon C", false, true)
+                new Control("Test ButtonId A", "Test LeftText A", "Test MiddleText A", "Test RightText A", ImmutableHashSet.Create("Test Styling Flag A A", "Test Styling Flag A B")),
+                new Control("Test ButtonId B", "Test LeftText B", "Test MiddleText B", "Test RightText B", ImmutableHashSet<string>.Empty),
+                new Control("Test ButtonId C", "Test LeftText C", "Test MiddleText C", "Test RightText C", ImmutableHashSet.Create("Test Styling Flag C A", "Test Styling Flag C B", "Test Styling Flag C C"))
             ));
 
             prompt = JsonConvert.DeserializeObject<Prompt>(JsonConvert.SerializeObject(prompt));
 
             Assert.Equal(3, prompt.Controls.Length);
             Assert.Equal("Test ButtonId A", prompt.Controls[0].ButtonId);
-            Assert.Equal("Test LeftIcon A", prompt.Controls[0].LeftIcon);
             Assert.Equal("Test LeftText A", prompt.Controls[0].LeftText);
             Assert.Equal("Test MiddleText A", prompt.Controls[0].MiddleText);
             Assert.Equal("Test RightText A", prompt.Controls[0].RightText);
-            Assert.Equal("Test RightIcon A", prompt.Controls[0].RightIcon);
-            Assert.True(prompt.Controls[0].IsFirstInGroup);
-            Assert.False(prompt.Controls[0].IsLastInGroup);
+            Assert.Equal(new[] { "Test Styling Flag A A", "Test Styling Flag A B" }, prompt.Controls[0].StylingFlags.OrderBy(i => i));
             Assert.Equal("Test ButtonId B", prompt.Controls[1].ButtonId);
-            Assert.Equal("Test LeftIcon B", prompt.Controls[1].LeftIcon);
             Assert.Equal("Test LeftText B", prompt.Controls[1].LeftText);
             Assert.Equal("Test MiddleText B", prompt.Controls[1].MiddleText);
             Assert.Equal("Test RightText B", prompt.Controls[1].RightText);
-            Assert.Equal("Test RightIcon B", prompt.Controls[1].RightIcon);
-            Assert.True(prompt.Controls[1].IsFirstInGroup);
-            Assert.True(prompt.Controls[1].IsLastInGroup);
+            Assert.Empty(prompt.Controls[1].StylingFlags);
             Assert.Equal("Test ButtonId C", prompt.Controls[2].ButtonId);
-            Assert.Equal("Test LeftIcon C", prompt.Controls[2].LeftIcon);
             Assert.Equal("Test LeftText C", prompt.Controls[2].LeftText);
             Assert.Equal("Test MiddleText C", prompt.Controls[2].MiddleText);
             Assert.Equal("Test RightText C", prompt.Controls[2].RightText);
-            Assert.Equal("Test RightIcon C", prompt.Controls[2].RightIcon);
-            Assert.False(prompt.Controls[2].IsFirstInGroup);
-            Assert.True(prompt.Controls[2].IsLastInGroup);
+            Assert.Equal(new[] { "Test Styling Flag C A", "Test Styling Flag C B", "Test Styling Flag C C" }, prompt.Controls[2].StylingFlags.OrderBy(i => i));
         }
 
         [Fact, Trait("Type", "Unit")]
