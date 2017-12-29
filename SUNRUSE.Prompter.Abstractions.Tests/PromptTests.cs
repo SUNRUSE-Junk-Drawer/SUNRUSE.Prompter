@@ -91,29 +91,29 @@ namespace SUNRUSE.Prompter.Abstractions.Tests
         }
 
         [Fact, Trait("Type", "Unit")]
-        public void BackgroundLayersDefaultsToEmpty()
+        public void StylingFlagsDefaultsToEmpty()
         {
             var prompt = new Prompt(Guid.NewGuid(), ImmutableArray<Control>.Empty);
 
-            Assert.Empty(prompt.BackgroundLayers);
+            Assert.Empty(prompt.StylingFlags);
         }
 
         [Fact, Trait("Type", "Unit")]
-        public void BackgroundLayersSet()
+        public void StylingFlagsSet()
         {
-            var prompt = new Prompt(Guid.NewGuid(), ImmutableArray<Control>.Empty, ImmutableArray.Create("Test Background Layer A", "Test Background Layer B", "Test Background Layer C"));
+            var prompt = new Prompt(Guid.NewGuid(), ImmutableArray<Control>.Empty, ImmutableHashSet.Create("Test Styling Flag A", "Test Styling Flag B", "Test Styling Flag C"));
 
-            Assert.Equal(new[] { "Test Background Layer A", "Test Background Layer B", "Test Background Layer C" }, prompt.BackgroundLayers);
+            Assert.Equal(new[] { "Test Styling Flag A", "Test Styling Flag B", "Test Styling Flag C" }, prompt.StylingFlags.OrderBy(i => i));
         }
 
         [Fact, Trait("Type", "Unit")]
-        public void BackgroundLayersRoundTripsSerialization()
+        public void StylingFlagsRoundTripsSerialization()
         {
-            var prompt = new Prompt(Guid.NewGuid(), ImmutableArray<Control>.Empty, ImmutableArray.Create("Test Background Layer A", "Test Background Layer B", "Test Background Layer C"));
+            var prompt = new Prompt(Guid.NewGuid(), ImmutableArray<Control>.Empty, ImmutableHashSet.Create("Test Styling Flag A", "Test Styling Flag B", "Test Styling Flag C"));
 
             prompt = JsonConvert.DeserializeObject<Prompt>(JsonConvert.SerializeObject(prompt));
 
-            Assert.Equal(new[] { "Test Background Layer A", "Test Background Layer B", "Test Background Layer C" }, prompt.BackgroundLayers);
+            Assert.Equal(new[] { "Test Styling Flag A", "Test Styling Flag B", "Test Styling Flag C" }, prompt.StylingFlags.OrderBy(i => i));
         }
     }
 }
