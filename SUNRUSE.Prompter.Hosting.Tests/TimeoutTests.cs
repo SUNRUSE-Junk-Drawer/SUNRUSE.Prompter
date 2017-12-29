@@ -735,7 +735,7 @@ namespace SUNRUSE.Prompter.Hosting.Tests
         [InlineData(true, TestAction.Dispose, TestAction.Dispose, TestAction.Dispose, TestAction.Dispose)]
         public async Task Fuzz(bool disposed, params TestAction[] actions)
         {
-            await Task.WhenAll(Enumerable.Range(0, 150).Select(async i =>
+            var results = await Task.WhenAll(Enumerable.Range(0, 150).Select(async i =>
             {
                 var disposable = new DisposableMock();
                 using (var timeout = new Timeout(TimeSpan.FromMilliseconds(400), disposable))
@@ -752,9 +752,12 @@ namespace SUNRUSE.Prompter.Hosting.Tests
                         }
                     }
 
-                    Assert.Equal(disposed ? 1 : 0, disposable.DisposedTimes);
+                    return disposable.DisposedTimes;
                 }
             }));
+
+            Assert.Equal(disposed ? 150 : 0, results.Sum());
+            Assert.Empty(results.Where(result => result != 0 && result != 1));
         }
     }
 }
