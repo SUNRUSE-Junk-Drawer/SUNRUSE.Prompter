@@ -738,15 +738,15 @@ namespace SUNRUSE.Prompter.Hosting.Tests
             await Task.WhenAll(Enumerable.Range(0, 150).Select(async i =>
             {
                 var disposable = new DisposableMock();
-                using (var timeout = new Timeout(TimeSpan.FromMilliseconds(100), disposable))
+                using (var timeout = new Timeout(TimeSpan.FromMilliseconds(250), disposable))
                 {
                     foreach (var action in actions)
                     {
                         switch (action)
                         {
                             case TestAction.Reset: timeout.Reset(); break;
-                            case TestAction.UnderIntervalDelay: await Task.Delay(50); break;
-                            case TestAction.OverIntervalDelay: await Task.Delay(150); break;
+                            case TestAction.UnderIntervalDelay: await Task.Delay(150); break;
+                            case TestAction.OverIntervalDelay: await Task.Delay(350); break;
                             case TestAction.Dispose: timeout.Dispose(); break;
                             default: throw new NotImplementedException();
                         }
